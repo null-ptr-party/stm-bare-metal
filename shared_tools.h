@@ -1,0 +1,2 @@
+#ifndef _SHARED_TOOLS_H
+#def _SHARED_TOOLS_H
