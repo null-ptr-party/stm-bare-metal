@@ -33,19 +33,25 @@ void enable_cfg(void);
 
 //<=====================pll======================================================>
 
+// enumerators
 enum pll_src {HSI, CSI, HSE, NO_CLK};
 
 enum pll_input_rng {RNG_ONE_TWO, RNG_TWO_FOUR, RNG_FOUR_EIGHT, RNG_EIGHT_SIXTEEN};
 
 enum vco_rng {WIDE, MEDIUM};
 
+enum pll {PLL1, PLL2, PLL3};
 
-
+// structs
 struct pll_config
 {
 	volatile uint8_t PLL_PRSCL, PLL_SRC, VCO, DIVP_EN, DIVQ_EN, DIVR_EN, PLL_IN_RNG, VCO_RNG, FRAC_EN,
-		DIV_FCTR_P, DIV_FCTR_Q, D_FCTR_R
+		DIV_FCTR_P, DIV_FCTR_Q, D_FCTR_R;
+
+	volatile uint32_t PLL_MULT;
 };
 
+// functions
+void cfg_pll(struct pll_config* config, enum pll_num);
 
 #endif
