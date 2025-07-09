@@ -97,15 +97,15 @@ void cfg_pll(struct pll_config* config, uint8_t pll_num)
 		// Enable outputs that are enabled in config struct
 		if (config->DIVP_EN)
 		{
-			RCC->PLL_CFGR |= BIT(19);
+			RCC->PLL_CFGR |= BIT(22);
 		}
 		if (config->DIVQ_EN)
 		{
-			RCC->PLL_CFGR |= BIT(20);
+			RCC->PLL_CFGR |= BIT(23);
 		}
 		if (config->DIVR_EN)
 		{
-			RCC->PLL_CFGR |= BIT(21);
+			RCC->PLL_CFGR |= BIT(24);
 		}
 
 		break
