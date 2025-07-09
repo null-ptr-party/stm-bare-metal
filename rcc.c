@@ -15,9 +15,10 @@ void enable_cfg(void)
 }
 
 // configures PLL using pll_config struct
-void cfg_pll(struct pll_config* config, enum pll_num)
+void cfg_pll(struct pll_config* config, uint8_t pll_num)
 {
 	//note that PLL enumerator maps pll1 -> 0, pll2->1, pll3->2
+	/* todo: need to make this capable of configuring in any state other than reset*/
 
 	// set pll source clock and prescaler
 	RCC->PLL_CKSELR |= ((0x03) & config->PLL_SRC); // set pll clock source.
@@ -55,7 +56,6 @@ void cfg_pll(struct pll_config* config, enum pll_num)
 		{
 			RCC->PLL_CFGR |= BIT(18);
 		}
-
 		break
 
 	case(PLL2):
@@ -114,6 +114,6 @@ void cfg_pll(struct pll_config* config, enum pll_num)
 		break
 	}
 
-
+	// PLL toggled on by separate function
 
 }
