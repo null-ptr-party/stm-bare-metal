@@ -17,7 +17,7 @@ void enable_cfg(void)
 // configures PLL using pll_config struct
 void cfg_pll(struct pll_config* config, uint8_t pll_num)
 {
-	//note that PLL enumerator maps pll1 -> 0, pll2->1, pll3->2
+	//note that PLL macros are pll1 -> 0, pll2->1, pll3->2
 	/* todo: need to make this capable of configuring in any state other than reset*/
 
 	// set pll source clock and prescaler
