@@ -65,6 +65,6 @@ struct pll_config
 };
 
 // functions
-void cfg_pll(struct pll_config* config, enum pll_num);
+void cfg_pll(struct pll_config* config, uint8_t pll_num);
 
 #endif
