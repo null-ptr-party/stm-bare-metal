@@ -33,14 +33,27 @@ void enable_cfg(void);
 
 //<=====================pll======================================================>
 
-// enumerators
-enum pll_src {HSI, CSI, HSE, NO_CLK};
+// defines for PLL
+// Clocksource defines
+#define HSI 0U
+#define CSI 1U
+#define HSE 2U
+#define NO_CLK 3U
 
-enum pll_input_rng {RNG_ONE_TWO, RNG_TWO_FOUR, RNG_FOUR_EIGHT, RNG_EIGHT_SIXTEEN};
+// input range defines
+#define RNG_ONE_TWO 0U
+#define RNG_TWO_FOUR 1U
+#define RNG_FOUR_EIGHT 2U
+#define RNG_EIGHT_SIXTEEN 3U
 
-enum vco_rng {WIDE, MEDIUM};
+// vco range defines
+#define WIDE 0U
+# define MEDIUM 1U
 
-enum pll {PLL1, PLL2, PLL3};
+// PLL number defines
+#define PLL1 0U
+#define PLL2 1U
+#define PLL3 2U
 
 // structs
 struct pll_config
