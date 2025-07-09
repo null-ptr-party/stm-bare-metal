@@ -48,7 +48,7 @@ void enable_cfg(void);
 
 // vco range defines
 #define WIDE 0U
-# define MEDIUM 1U
+#define MEDIUM 1U
 
 // PLL number defines
 #define PLL1 0U
@@ -65,6 +65,10 @@ struct pll_config
 };
 
 // functions
-void cfg_pll(struct pll_config* config, uint8_t pll_num);
+void cfg_pll(struct pll_config* config, uint8_t pll);
+
+void start_pll(uint8_t pll);
+
+uint32_t is_pll_rdy(uint8_t pll);
 
 #endif
