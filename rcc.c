@@ -133,16 +133,19 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 }
 
 	
-	// PLL toggled on by separate function
+// PLL toggled on by separate function
+void start_pll(uint8_t pll)
+{
+	RCC->CR |= (0x01 << (2 * pll + 24U));
+}
 
-	void start_pll(uint8_t pll)
-	{
-		RCC->CR |= (0x01 << (2 * pll + 24U));
-	}
+uint32_t is_pll_rdy(uint8_t pll)
+{
+	return (uint32_t)(0x01 & (RCC->CR >> (25 + 2 * pll)));
+}
 
-	uint32_t is_pll_rdy(uint8_t pll)
-	{
-		return (uint32_t)(RCC->CR >> (25 + 2 * pll));
-	}
-
+void set_sys_clk(uint8_t clksrc)
+{
+	RCC->CFGR &= ~(0x03);
+	RCC->CFGR |= (0x03 & clksrc);
 }

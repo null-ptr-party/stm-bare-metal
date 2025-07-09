@@ -71,4 +71,12 @@ void start_pll(uint8_t pll);
 
 uint32_t is_pll_rdy(uint8_t pll);
 
+// system clock sources
+#define HSI 0U
+#define CSI 1U
+#define HSE 2U
+#define PLL1 3U
+
+void set_sys_clk(uint8_t clksrc);
+
 #endif
