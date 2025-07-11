@@ -35,20 +35,20 @@ void enable_cfg(void);
 
 // defines for PLL
 // Clocksource defines
-#define HSI 0U
-#define CSI 1U
-#define HSE 2U
-#define NO_CLK 3U
+#define PLL_SRC_HSI 0U
+#define PLL_SRC_CSI 1U
+#define PLL_SRC_HSE 2U
+#define PLL_SRC_NO_CLK 3U
 
 // input range defines
-#define RNG_ONE_TWO 0U
-#define RNG_TWO_FOUR 1U
-#define RNG_FOUR_EIGHT 2U
-#define RNG_EIGHT_SIXTEEN 3U
+#define PLL_IN_RNG_ONE_TWO 0U
+#define PLL_IN_RNG_TWO_FOUR 1U
+#define PLL_IN_RNG_FOUR_EIGHT 2U
+#define PLL_IN_RNG_EIGHT_SIXTEEN 3U
 
 // vco range defines
-#define WIDE 0U
-#define MEDIUM 1U
+#define VCO_RNG_WIDE 0U
+#define VCO_RNG_MED 1U
 
 // PLL number defines
 #define PLL1 0U
@@ -59,7 +59,7 @@ void enable_cfg(void);
 struct pll_config
 {
 	volatile uint8_t PLL_PRSCL, PLL_SRC, VCO, DIVP_EN, DIVQ_EN, DIVR_EN, PLL_IN_RNG, VCO_RNG, FRAC_EN,
-		DIV_FCTR_P, DIV_FCTR_Q, D_FCTR_R;
+		DIV_FCTR_P, DIV_FCTR_Q, DIV_FCTR_R;
 
 	volatile uint32_t PLL_MULT;
 };
@@ -68,14 +68,16 @@ struct pll_config
 void cfg_pll(struct pll_config* config, uint8_t pll);
 
 void start_pll(uint8_t pll);
+void start_hse(uint8_t bypass); //Note the nucleo board uses HSE bypass.
 
-uint32_t is_pll_rdy(uint8_t pll);
+uint32_t pll_is_rdy(uint8_t pll);
+uint32_t hse_is_rdy(void);
 
 // system clock sources
-#define HSI 0U
-#define CSI 1U
-#define HSE 2U
-#define PLL1 3U
+#define SYSCLK_SRC_HSI 0U
+#define SYSCLK_SRC_CSI 1U
+#define SYSCLK_SRC_HSE 2U
+#define SYSCLK_SRC_PLL1 3U
 
 void set_sys_clk(uint8_t clksrc);
 
