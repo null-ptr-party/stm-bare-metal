@@ -48,10 +48,10 @@ int main(void)
 	}
 
 	//setup sysclk
-	set_sys_clk(SYSCLK_SRC_PLL1); // this is probably the part that bricks.
+	set_sys_clk(SYSCLK_SRC_PLL1);
 	// setup systick
 	struct systick_setup settings = { .ctr_enbl = CTR_ENABLE,
-	.excpt_enbl = EXCPT_ENBL, .clksrc = CLKSRC_EXT, .rld_val = 0x3d090 };
+	.excpt_enbl = EXCPT_ENBL, .clksrc = CLKSRC_PRC, .rld_val = 0x3D08F };
 
 	struct systick_setup* stg_ptr = &settings;
 
@@ -64,10 +64,8 @@ int main(void)
 	{
 		set_gpio_output(GPIOB, 14U);
 		wait_ms(1000);
-		//(9999999UL)
 		reset_gpio_output(GPIOB, 14U);
 		wait_ms(1000);
-		//cnt_down(9999999UL);
 	}
 	return 0;
 }
@@ -102,11 +100,9 @@ void systick_handler(void)
 
 void wait_ms(uint32_t ms)
 {
-	uint32_t t_start, t_stop = 0;
-	t_start = s_ticks;
-	t_stop = t_start + ms;
+	uint32_t t_stop = s_ticks + ms;
 	
-	while (t_start < t_stop)
+	while (s_ticks < t_stop)
 	{
 		;
 	}
