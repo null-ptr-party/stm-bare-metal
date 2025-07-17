@@ -59,7 +59,7 @@ void enable_cfg(void);
 struct pll_config
 {
 	volatile uint8_t PLL_PRSCL, PLL_SRC, VCO, DIVP_EN, DIVQ_EN, DIVR_EN, PLL_IN_RNG, VCO_RNG, FRAC_EN,
-		DIV_FCTR_P, DIV_FCTR_Q, DIV_FCTR_R;
+		DIV_FCTR_P, DIV_FCTR_Q, DIV_FCTR_R, DIV_FCTR_FRAC;
 
 	volatile uint32_t PLL_MULT;
 };
