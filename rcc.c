@@ -9,6 +9,12 @@ void enable_gpio_bank(enum gpio_enable port)
 	// No return
 }
 
+void enable_stlink_uart(void)
+{
+	// uart 3 is connected to stlinks
+	RCC->APB1LENR |= BIT(18);
+}
+
 void enable_cfg(void)
 {
 	RCC->APB4ENR &= ~(0x01U << 1);
@@ -52,6 +58,16 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 		RCC->PLL1DIVR &= ~(0x7FU << 24U);
 		RCC->PLL1DIVR |= ((0x7FU & config->DIV_FCTR_R) << 24U);
 
+		if (config->FRAC_EN)
+		{
+			// enable fractional bit
+			RCC->CFGR &= ~(BIT(0)); // note this is necessary since PLL sets on change from 0->1.
+			RCC->CFGR |= BIT(0);
+			// set fractional part of multiplier if enabled
+			RCC->PLL1FRACR &= ~(0x1FFFU); // Clear bit
+			RCC->PLL1FRACR |= (0x1FFFU & config->DIV_FCTR_FRAC);
+		}
+
 		// Enable outputs that are enabled in config struct
 		if (config->DIVP_EN)
 		{
@@ -80,6 +96,16 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 		// set pll div factor for R output
 		RCC->PLL2DIVR &= ~(0x7FU << 24U);
 		RCC->PLL2DIVR |= ((0x7FU & config->DIV_FCTR_R) << 24U);
+
+		if (config->FRAC_EN)
+		{
+			// enable fractional bit
+			RCC->CFGR &= ~(BIT(4)); // note this is necessary since PLL sets on change from 0->1.
+			RCC->CFGR |= BIT(4);
+			// set fractional part of multiplier if enabled
+			RCC->PLL2FRACR &= ~(0x1FFFU); // Clear bit
+			RCC->PLL2FRACR |= (0x1FFFU & config->DIV_FCTR_FRAC);
+		}
 
 		// Enable outputs that are enabled in config struct
 		if (config->DIVP_EN)
@@ -110,6 +136,16 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 		// set pll div factor for R output
 		RCC->PLL3DIVR &= ~(0x7FU << 24U);
 		RCC->PLL3DIVR |= ((0x7FU & config->DIV_FCTR_R) << 24U);
+
+		if (config->FRAC_EN)
+		{
+			// enable fractional bit
+			RCC->CFGR &= ~(BIT(8)); // note this is necessary since PLL sets on change from 0->1.
+			RCC->CFGR |= BIT(8);
+			// set fractional part of multiplier if enabled
+			RCC->PLL3FRACR &= ~(0x1FFFU); // Clear bit
+			RCC->PLL3FRACR |= (0x1FFFU & config->DIV_FCTR_FRAC);
+		}
 
 		// Enable outputs that are enabled in config struct
 		if (config->DIVP_EN)
