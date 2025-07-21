@@ -55,13 +55,23 @@ void enable_cfg(void);
 #define PLL2 1U
 #define PLL3 2U
 
-// structs
+// PLL structs
 struct pll_config
 {
 	volatile uint8_t PLL_PRSCL, PLL_SRC, VCO, DIVP_EN, DIVQ_EN, DIVR_EN, PLL_IN_RNG, VCO_RNG, FRAC_EN,
 		DIV_FCTR_P, DIV_FCTR_Q, DIV_FCTR_R, DIV_FCTR_FRAC;
 
 	volatile uint32_t PLL_MULT;
+};
+
+// Kernel clock selection register structs (separated by domain)
+struct krnl_clk_cfg
+{
+	uint8_t d1_per_clk, d1_sdmmc, d1_octospi, d1_fmc, d2_swpmi, d2_fdcan,
+		d2_dfsdm1, d2_spdifrx, d2_spi45, d2_spi123, d2_sai1, d2_lptim1,
+		d2_cec, d2_usb, d2_i2c1235, d2_rng, d2_usart16910, d2_usart234578,
+		d3_spi6, d3_sai4b, d3_sai4a, d3_adc, d3_lptim345, d3_lptim2, d3_i2c4,
+		d3_lpuart1;
 };
 
 // functions
@@ -80,5 +90,9 @@ uint32_t hse_is_rdy(void);
 #define SYSCLK_SRC_PLL1 3U
 
 void set_sys_clk(uint8_t clksrc);
+
+// configure kernel clocks
+void cfg_krnl_clks(krnl_clk_cfg);
+void enable_uart3(void);
 
 #endif
