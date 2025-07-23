@@ -62,4 +62,6 @@ void set_gpio_output(struct gpio *gpio_port, uint8_t pin_num);
 
 void reset_gpio_output(struct gpio *gpio_port, uint8_t pin_num);
 
+void set_alt_func(struct gpio *gpio_port, uint8_t pin_num, uint8_t af_num);
+
 #endif
