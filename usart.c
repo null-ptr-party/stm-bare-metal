@@ -28,3 +28,9 @@ void disable_tx(struct usart* usart)
 {
 	usart->USART_CR1 &= ~BIT(3);
 }
+
+void usart_transmit_byte(struct usart* usart, uint8_t byte)
+{
+	usart->USART_TDR |= byte;
+	while (!usart->USART_ISR >> 6); // block until transfer complete.
+}
