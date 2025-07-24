@@ -28,16 +28,16 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 
 	// set pll source clock and prescaler. note prescaler range is 1 to 63. 0 is precsaler disabled
 	RCC->PLLCKSELR &= ~(0x03U); // clear bits
-	RCC->PLLCKSELR |= (0x03U & config->PLL_SRC); // set pll clock source.
+	RCC->PLLCKSELR |= (0x03U & config->pll_src); // set pll clock source.
 	// set prescaler
 	RCC->PLLCKSELR &= ~(0x3fU << (4 + 8 * (uint32_t)pll)); // clear bits
-	RCC->PLLCKSELR |= ((0x3fU & config->PLL_PRSCL) << (4 + 8 * (uint32_t)pll));
+	RCC->PLLCKSELR |= ((0x3fU & config->pll_prscl) << (4 + 8 * (uint32_t)pll));
 	// set pll range
 	RCC->PLLCFGR &= ~(0x03U << (4 * (uint32_t)pll + 2U)); // clear bits
-	RCC->PLLCFGR |= ((0x03U & config->PLL_IN_RNG) << (4 * (uint32_t)pll + 2U));
+	RCC->PLLCFGR |= ((0x03U & config->pll_in_rng) << (4 * (uint32_t)pll + 2U));
 	// set vco range
 	RCC->PLLCFGR &= ~(0x01U << (4 * (uint32_t)pll + 1U)); // clear bits
-	RCC->PLLCFGR |= ((0x01U & config->VCO_RNG) << (4 * (uint32_t)pll + 1U));
+	RCC->PLLCFGR |= ((0x01U & config->vco_rng) << (4 * (uint32_t)pll + 1U));
 
 	switch (pll)
 	{
@@ -47,37 +47,37 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 		// it is in the range set by VCO range.
 		// set pll multiplication factor (set vco).  Range is 1 to 512. note 0 is 1x
 		RCC->PLL1DIVR &= ~(0x1FFU);
-		RCC->PLL1DIVR |= (0x1FFU & config->PLL_MULT);
+		RCC->PLL1DIVR |= (0x1FFU & config->pll_mult);
 		// set pll div factor for P output. Range is 1 to 128. note 0 is 1x
 		RCC->PLL1DIVR &= ~(0x7FU << 9U);
-		RCC->PLL1DIVR |= ((0x7FU & config->DIV_FCTR_P) << 9U);
+		RCC->PLL1DIVR |= ((0x7FU & config->div_fctr_p) << 9U);
 		// set pll div factor for Q output
 		RCC->PLL1DIVR &= ~(0x7FU << 16U);
-		RCC->PLL1DIVR |= ((0x7FU & config->DIV_FCTR_Q) << 16U);
+		RCC->PLL1DIVR |= ((0x7FU & config->div_fctr_q) << 16U);
 		// set pll div factor for R output
 		RCC->PLL1DIVR &= ~(0x7FU << 24U);
-		RCC->PLL1DIVR |= ((0x7FU & config->DIV_FCTR_R) << 24U);
+		RCC->PLL1DIVR |= ((0x7FU & config->div_fctr_r) << 24U);
 
-		if (config->FRAC_EN)
+		if (config->frac_en)
 		{
 			// enable fractional bit
 			RCC->CFGR &= ~(BIT(0)); // note this is necessary since PLL sets on change from 0->1.
 			RCC->CFGR |= BIT(0);
 			// set fractional part of multiplier if enabled
 			RCC->PLL1FRACR &= ~(0x1FFFU << 3); // Clear bit
-			RCC->PLL1FRACR |= ((0x1FFFU & config->DIV_FCTR_FRAC) << 3);
+			RCC->PLL1FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
 		}
 
 		// Enable outputs that are enabled in config struct
-		if (config->DIVP_EN)
+		if (config->divp_en)
 		{
 			RCC->PLLCFGR |= BIT(16);
 		}
-		if (config->DIVQ_EN)
+		if (config->divq_en)
 		{
 			RCC->PLLCFGR |= BIT(17);
 		}
-		if (config->DIVR_EN)
+		if (config->divr_en)
 		{
 			RCC->PLLCFGR |= BIT(18);
 		}
@@ -86,37 +86,37 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 	case(PLL2):
 		// set pll multiplication factor (set vco)
 		RCC->PLL2DIVR &= ~(0x1FFU);
-		RCC->PLL2DIVR |= (0x1FFU & config->PLL_MULT);
+		RCC->PLL2DIVR |= (0x1FFU & config->pll_mult);
 		// set pll div factor for P output
 		RCC->PLL2DIVR &= ~(0x7FU << 9U);
-		RCC->PLL2DIVR |= ((0x7FU & config->DIV_FCTR_P) << 9U);
+		RCC->PLL2DIVR |= ((0x7FU & config->div_fctr_p) << 9U);
 		// set pll div factor for Q output
 		RCC->PLL2DIVR &= ~(0x7FU << 16U);
-		RCC->PLL2DIVR |= ((0x7FU & config->DIV_FCTR_Q) << 16U);
+		RCC->PLL2DIVR |= ((0x7FU & config->div_fctr_q) << 16U);
 		// set pll div factor for R output
 		RCC->PLL2DIVR &= ~(0x7FU << 24U);
-		RCC->PLL2DIVR |= ((0x7FU & config->DIV_FCTR_R) << 24U);
+		RCC->PLL2DIVR |= ((0x7FU & config->div_fctr_r) << 24U);
 
-		if (config->FRAC_EN)
+		if (config->frac_en)
 		{
 			// enable fractional bit
 			RCC->CFGR &= ~(BIT(4)); // note this is necessary since PLL sets on change from 0->1.
 			RCC->CFGR |= BIT(4);
 			// set fractional part of multiplier if enabled
 			RCC->PLL2FRACR &= ~(0x1FFFU << 3); // Clear bit
-			RCC->PLL2FRACR |= ((0x1FFFU & config->DIV_FCTR_FRAC) << 3);
+			RCC->PLL2FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
 		}
 
 		// Enable outputs that are enabled in config struct
-		if (config->DIVP_EN)
+		if (config->divp_en)
 		{
 			RCC->PLLCFGR |= BIT(19);
 		}
-		if (config->DIVQ_EN)
+		if (config->divq_en)
 		{
 			RCC->PLLCFGR |= BIT(20);
 		}
-		if (config->DIVR_EN)
+		if (config->divr_en)
 		{
 			RCC->PLLCFGR |= BIT(21);
 		}
@@ -126,37 +126,37 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 	case(PLL3):
 		// set pll multiplication factor (set vco)
 		RCC->PLL3DIVR &= ~(0x1FFU);
-		RCC->PLL3DIVR |= (0x1FFU & config->PLL_MULT);
+		RCC->PLL3DIVR |= (0x1FFU & config->pll_mult);
 		// set pll div factor for P output
 		RCC->PLL3DIVR &= ~(0x7FU << 9U);
-		RCC->PLL3DIVR |= ((0x7FU & config->DIV_FCTR_P) << 9U);
+		RCC->PLL3DIVR |= ((0x7FU & config->div_fctr_p) << 9U);
 		// set pll div factor for Q output
 		RCC->PLL3DIVR &= ~(0x7FU << 16U);
-		RCC->PLL3DIVR |= ((0x7FU & config->DIV_FCTR_Q) << 16U);
+		RCC->PLL3DIVR |= ((0x7FU & config->div_fctr_q) << 16U);
 		// set pll div factor for R output
 		RCC->PLL3DIVR &= ~(0x7FU << 24U);
-		RCC->PLL3DIVR |= ((0x7FU & config->DIV_FCTR_R) << 24U);
+		RCC->PLL3DIVR |= ((0x7FU & config->div_fctr_r) << 24U);
 
-		if (config->FRAC_EN)
+		if (config->frac_en)
 		{
 			// enable fractional bit
 			RCC->CFGR &= ~(BIT(8)); // note this is necessary since PLL sets on change from 0->1.
 			RCC->CFGR |= BIT(8);
 			// set fractional part of multiplier if enabled
 			RCC->PLL3FRACR &= ~(0x1FFFU << 3); // Clear bit
-			RCC->PLL3FRACR |= ((0x1FFFU & config->DIV_FCTR_FRAC) << 3);
+			RCC->PLL3FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
 		}
 
 		// Enable outputs that are enabled in config struct
-		if (config->DIVP_EN)
+		if (config->divp_en)
 		{
 			RCC->PLLCFGR |= BIT(22);
 		}
-		if (config->DIVQ_EN)
+		if (config->divq_en)
 		{
 			RCC->PLLCFGR |= BIT(23);
 		}
-		if (config->DIVR_EN)
+		if (config->divr_en)
 		{
 			RCC->PLLCFGR |= BIT(24);
 		}
@@ -209,7 +209,7 @@ void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 {
 	// setup krnl clk for d1
 	uint32_t word = (0x03U & cfg->d1_fmc) | ((0x03U & cfg->d1_octospi) << 4) |
-		((0x03U & cfg->d1_sdmmc) << 17) | ((0x03U & cfg->d1_ckper) << 28);
+		((0x03U & cfg->d1_sdmmc) << 17) | ((0x03U & cfg->d1_per_clk) << 28);
 
 	RCC->D1CCIPR |= word;
 
