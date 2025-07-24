@@ -9,10 +9,9 @@ void enable_gpio_bank(enum gpio_enable port)
 	// No return
 }
 
-void enable_stlink_
-(void)
+void enable_stlink(void)
 {
-	// uart 3 is connected to stlinks
+	// uart 3 is connected to stlink
 	RCC->APB1LENR |= BIT(18);
 }
 
@@ -65,8 +64,8 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 			RCC->CFGR &= ~(BIT(0)); // note this is necessary since PLL sets on change from 0->1.
 			RCC->CFGR |= BIT(0);
 			// set fractional part of multiplier if enabled
-			RCC->PLL1FRACR &= ~(0x1FFFU); // Clear bit
-			RCC->PLL1FRACR |= (0x1FFFU & config->DIV_FCTR_FRAC);
+			RCC->PLL1FRACR &= ~(0x1FFFU << 3); // Clear bit
+			RCC->PLL1FRACR |= ((0x1FFFU & config->DIV_FCTR_FRAC) << 3);
 		}
 
 		// Enable outputs that are enabled in config struct
@@ -104,8 +103,8 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 			RCC->CFGR &= ~(BIT(4)); // note this is necessary since PLL sets on change from 0->1.
 			RCC->CFGR |= BIT(4);
 			// set fractional part of multiplier if enabled
-			RCC->PLL2FRACR &= ~(0x1FFFU); // Clear bit
-			RCC->PLL2FRACR |= (0x1FFFU & config->DIV_FCTR_FRAC);
+			RCC->PLL2FRACR &= ~(0x1FFFU << 3); // Clear bit
+			RCC->PLL2FRACR |= ((0x1FFFU & config->DIV_FCTR_FRAC) << 3);
 		}
 
 		// Enable outputs that are enabled in config struct
@@ -144,8 +143,8 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 			RCC->CFGR &= ~(BIT(8)); // note this is necessary since PLL sets on change from 0->1.
 			RCC->CFGR |= BIT(8);
 			// set fractional part of multiplier if enabled
-			RCC->PLL3FRACR &= ~(0x1FFFU); // Clear bit
-			RCC->PLL3FRACR |= (0x1FFFU & config->DIV_FCTR_FRAC);
+			RCC->PLL3FRACR &= ~(0x1FFFU << 3); // Clear bit
+			RCC->PLL3FRACR |= ((0x1FFFU & config->DIV_FCTR_FRAC) << 3);
 		}
 
 		// Enable outputs that are enabled in config struct
