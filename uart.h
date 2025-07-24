@@ -14,6 +14,7 @@ struct usart_cfg
 
 	uint32_t baud;
 };
+
 // macros for usart cfg
 #define OVERSAMPLE8 1U
 #define OVERSAMPLE16 0U
@@ -28,8 +29,7 @@ struct usart
 	USART_RTOR, USART_RQR, USART_ISR, USART_ICR, USART_RDR, USART_TDR, USART_PRESC;
 };
 
-struct
-	// Defines USARTs
+// Defines USARTs
 #define USART1 (struct usart *)0x40011000 // points to first register of USART (CR1)
 #define USART2 (struct usart *)0x40004400
 #define USART3 (struct usart *)0x40004800
@@ -41,6 +41,5 @@ struct
 void setup_usart(struct usart* usart, struct usart_cfg cfg);
 void enable_tx(struct usart* usart);
 void disable_tx(struct usart* usart);
-
 
 #endif
