@@ -38,7 +38,7 @@ struct usart
 // note stlink on usart3 which is pins PD8 PD9
 
 // setup functions
-void setup_usart(struct usart* usart, struct usart_cfg cfg);
+void setup_usart(struct usart* usart, struct usart_cfg* cfg);
 void enable_tx(struct usart* usart);
 void disable_tx(struct usart* usart);
 
