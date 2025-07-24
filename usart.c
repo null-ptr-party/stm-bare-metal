@@ -21,10 +21,10 @@ void setup_usart(struct usart* usart, struct usart_cfg* cfg)
 
 void enable_tx(struct usart* usart)
 {
-	usart |= BIT(3);
+	usart->USART_CR1 |= BIT(3);
 }
 
 void disable_tx(struct usart* usart)
 {
-	usart &= ~BIT(3);
+	usart->USART_CR1 &= ~BIT(3);
 }
