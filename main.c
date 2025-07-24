@@ -2,6 +2,7 @@
 #include "gpio.h"
 #include "rcc.h"
 #include "systick.h"
+#include "usart.h"
 #include "shared_tools.h"
 
 // below are defined in linker script. Hence extern
@@ -19,7 +20,7 @@ void wait_ms(uint32_t ms);
 // Globals
 static volatile uint32_t s_ticks = 0;
 
-// oeate section for NVIC vector table
+// Create section for NVIC vector table
 __attribute__((section(".vectors"))) void(*const table[16 + 163])(void) = {
 	// set _estack, reset to first elements of table.
 	_estack, _reset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, systick_handler // systick is the 16th word
@@ -27,8 +28,10 @@ __attribute__((section(".vectors"))) void(*const table[16 + 163])(void) = {
 
 int main(void)
 {
+	// =======================Configure clocks and pllss=============================
+
 	// start HSE
-	start_hse(TRUE); // this bricks the board... why? Well maybe not this. It is actually probably just the PLL
+	start_hse(TRUE);
 
 	while (!hse_is_rdy())
 	{
@@ -36,10 +39,10 @@ int main(void)
 	}
 
 	// setup pll1. 250 Mhz target
-	struct pll_config pllconfig = { .PLL_PRSCL = 1U, .PLL_SRC = PLL_SRC_HSE, .DIVP_EN = TRUE, .DIVQ_EN = FALSE,
-		.DIVR_EN = FALSE, .PLL_IN_RNG = PLL_IN_RNG_FOUR_EIGHT, .VCO_RNG = VCO_RNG_WIDE, .FRAC_EN = FALSE, .DIV_FCTR_P = 0x00, .PLL_MULT = 0x31};
+	struct pll_config pll1config = { .pll_prscl = 1U, .pll_src = PLL_SRC_HSE, .divp_en = TRUE, .divq_en = FALSE,
+		.divr_en = FALSE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_WIDE, .frac_en = FALSE, .div_fctr_p = 0x00, .pll_mult = 0x31};
 
-	cfg_pll(&pllconfig, PLL1);
+	cfg_pll(&pll1config, PLL1);
 	start_pll(PLL1);
 
 	while (!pll_is_rdy(PLL1))
@@ -47,18 +50,59 @@ int main(void)
 		; // block until pll ready
 	}
 
+	// setup pll2 58,982,400 hz target. 11.79648 PLL multiplier. 11x multiplier 6525 fractional multiplier.
+	// this is mainly driven by the desire to have an integer multiple of standard baud rates.
+	struct pll_config pll2config = { .pll_prscl = 1U, .pll_src = PLL_SRC_HSE, .divp_en = TRUE, .divq_en = TRUE,
+		.divr_en = TRUE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_WIDE, .frac_en = TRUE,
+		.div_fctr_p = 0x00U, .pll_mult = 0x0AU, .div_fctr_frac = 0x186FU};
+
+	cfg_pll(&pll2config, PLL2);
+	start_pll(PLL2);
+
+	while (!pll_is_rdy(PLL2))
+	{
+		; // block until pll ready
+	}
+
 	//setup sysclk
 	set_sys_clk(SYSCLK_SRC_PLL1);
-	// setup systick
+
+	// setup krnl clocks
+	struct krnl_clk_cfg krnl_cfg = { .d2_usart234578 = 1U };
+	cfg_krnl_clks(&krnl_cfg);
+
+	// =======================End Clock Setup=============================
+
+	// =======================Setup Systick ==============================
 	struct systick_setup settings = { .ctr_enbl = CTR_ENABLE,
 	.excpt_enbl = EXCPT_ENBL, .clksrc = CLKSRC_PRC, .rld_val = 0x3D08F };
 
 	struct systick_setup* stg_ptr = &settings;
 
 	init_systick(stg_ptr);
-	// setup gpio
+
+	// =======================End Systick ==============================
+
+	// =======================GPIO setup ===============================
+	// setup gpio for user LED
 	enable_gpio_bank(ENABLE_PB); // Enable port B.
 	set_gpio_mode(GPIOB, 14U, GPIO_MODE_OUTPUT);
+
+	// setup gpio for tx/rx
+	enable_gpio_bank(ENABLE_PD);
+	// tx
+	set_gpio_mode(GPIOD, 8U, GPIO_MODE_ALT_FUNC);
+	set_alt_func(GPIOD, 8U, AF1);
+	// rx
+	set_gpio_mode(GPIOD, 9U, GPIO_MODE_ALT_FUNC);
+	set_alt_func(GPIOD, 9U, AF1);
+
+	// =======================End GPIO setup =============================
+
+	// ======================= USART Setup ===============================
+	struct usart_cfg usart_cfg = { .word_len = DATABITS8,.oversmpl_mthd = OVERSAMPLE16,.baud = 0x1800 }; // target baud 0x1800
+	setup_usart(USART3, &usart_cfg);
+	enable_tx(USART3);
 
 	while (1)
 	{
@@ -70,7 +114,7 @@ int main(void)
 	return 0;
 }
 
-// fucntion
+// function
 __attribute__((naked, noreturn)) void _reset(void)
 {
 	for (long *dst = &_sdata, *source = &_sidata; dst < &_edata;)
