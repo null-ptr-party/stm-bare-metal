@@ -92,7 +92,7 @@ uint32_t hse_is_rdy(void);
 void set_sys_clk(uint8_t clksrc);
 
 // configure kernel clocks
-void cfg_krnl_clks(krnl_clk_cfg);
+void cfg_krnl_clks(struct krnl_clk_cfg* cfg);
 void enable_uart3(void);
 
 #endif

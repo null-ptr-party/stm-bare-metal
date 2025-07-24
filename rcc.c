@@ -205,7 +205,7 @@ void set_sys_clk(uint8_t clksrc)
 	RCC->CFGR |= (0x03U & clksrc);
 }
 
-void cfg_krnl_clks(struct *krnl_clk_cfg)
+void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 {
 	// setup krnl clk for d1
 	uint32_t word = (0x03U & krnl_clk_cfg->d1_fmc) | ((0x03U & krnl_clk_cfg->d1_octospi) << 4) |
