@@ -208,38 +208,38 @@ void set_sys_clk(uint8_t clksrc)
 void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 {
 	// setup krnl clk for d1
-	uint32_t word = (0x03U & krnl_clk_cfg->d1_fmc) | ((0x03U & krnl_clk_cfg->d1_octospi) << 4) |
-		((0x03U & krnl_clk_cfg->d1_sdmmc) << 17) | ((0x03U & krnl_clk_cfg->d1_ckper) << 28);
+	uint32_t word = (0x03U & cfg->d1_fmc) | ((0x03U & cfg->d1_octospi) << 4) |
+		((0x03U & cfg->d1_sdmmc) << 17) | ((0x03U & cfg->d1_ckper) << 28);
 
 	RCC->D1CCIPR |= word;
 
 	// setup krnl clk for d2 (first d2 reg)
-	word = (0x03U & krnl_clk_cfg->d2_sai1) | ((0x03U & krnl_clk_cfg->d2_spi123) << 12) |
-		((0x03U & krnl_clk_cfg->d2_spi45) << 16) | ((0x03U & krnl_clk_cfg->d2_spdifrx) << 20) |
-		((0x01U & krnl_clk_cfg->d2_dfsdm1) << 24) | ((0x03U & krnl_clk_cfg->d2_fdcan) << 28) |
-		((0x01U & krnl_clk_cfg->d2_swpmi) << 31);
+	word = (0x03U & cfg->d2_sai1) | ((0x03U & cfg->d2_spi123) << 12) |
+		((0x03U & cfg->d2_spi45) << 16) | ((0x03U & cfg->d2_spdifrx) << 20) |
+		((0x01U & cfg->d2_dfsdm1) << 24) | ((0x03U & cfg->d2_fdcan) << 28) |
+		((0x01U & cfg->d2_swpmi) << 31);
 
 	RCC->D2CCIP1R |= word;
 
 	// setup krnl clk for d2 (first d2 reg)
-	word = (0x03U & krnl_clk_cfg->d2_usart234578) | ((0x03U & krnl_clk_cfg->d2_usart16910) << 3) |
-		((0x03U & krnl_clk_cfg->d2_rng) << 8) | ((0x03U & krnl_clk_cfg->d2_i2c1235) << 12) |
-		((0x03U & krnl_clk_cfg->d2_usb) << 20) | ((0x03U & krnl_clk_cfg->d2_cec) << 22) |
-		((0x07U & krnl_clk_cfg->d2_swpmi) << 28);
+	word = (0x03U & cfg->d2_usart234578) | ((0x03U & cfg->d2_usart16910) << 3) |
+		((0x03U & cfg->d2_rng) << 8) | ((0x03U & cfg->d2_i2c1235) << 12) |
+		((0x03U & cfg->d2_usb) << 20) | ((0x03U & cfg->d2_cec) << 22) |
+		((0x07U & cfg->d2_swpmi) << 28);
 
 	RCC->D2CCIP2R |= word;
 
 	// setup krnl clk for d3.
-	word = (0x03U & krnl_clk_cfg->d3_lpuart1) | ((0x03U & krnl_clk_cfg->d3_i2c4) << 8) |
-		((0x03U & krnl_clk_cfg->d3_lptim2) << 10) | ((0x03U & krnl_clk_cfg->d3_lptim345) << 13) |
-		((0x03U & krnl_clk_cfg->d3_adc) << 16) | ((0x03U & krnl_clk_cfg->d3_sai4a) << 21) |
-		((0x03U & krnl_clk_cfg->d3_sai4b) << 24) | ((0x03U & krnl_clk_cfg->d3_spi6) << 28);
+	word = (0x03U & cfg->d3_lpuart1) | ((0x03U & cfg->d3_i2c4) << 8) |
+		((0x03U & cfg->d3_lptim2) << 10) | ((0x03U & cfg->d3_lptim345) << 13) |
+		((0x03U & cfg->d3_adc) << 16) | ((0x03U & cfg->d3_sai4a) << 21) |
+		((0x03U & cfg->d3_sai4b) << 24) | ((0x03U & cfg->d3_spi6) << 28);
 
-	RCC->D3CCIPR | = word;
+	RCC->D3CCIPR |= word;
 
 }
-	void enable_uart3(void)
-	{
-		RCC->APB1LENR |= BIT(18);
-	}
+
+void enable_uart3(void)
+{
+	RCC->APB1LENR |= BIT(18);
 }
