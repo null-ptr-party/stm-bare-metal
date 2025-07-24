@@ -5,7 +5,7 @@ CFLAGS  ?=  -W -Wall -Wextra -Werror -Wundef -Wshadow -Wdouble-promotion \
 			-mcpu=cortex-m7 -mthumb -mfloat-abi=hard
 
 LDFLAGS ?= -T link.ld -nostartfiles -nostdlib --specs nano.specs -lc -lgcc -Wl,--gc-sections -Wl,-Map=$@.map
-SOURCES = main.c gpio.c rcc.c systick.c
+SOURCES = main.c gpio.c rcc.c systick.c usart.c
 OUTNAME = firmware.elf
 	
 all: build extract
