@@ -58,10 +58,10 @@ void enable_cfg(void);
 // PLL structs
 struct pll_config
 {
-	volatile uint8_t PLL_PRSCL, PLL_SRC, VCO, DIVP_EN, DIVQ_EN, DIVR_EN, PLL_IN_RNG, VCO_RNG, FRAC_EN,
-		DIV_FCTR_P, DIV_FCTR_Q, DIV_FCTR_R, DIV_FCTR_FRAC;
+	uint8_t pll_prscl, pll_src, vco, divp_en, divq_en, divr_en, pll_in_rng, vco_rng, frac_en,
+		div_fctr_p, div_fctr_q, div_fctr_r;
 
-	volatile uint32_t PLL_MULT;
+	uint32_t pll_mult, div_fctr_frac;
 };
 
 // Kernel clock selection register structs (separated by domain)
