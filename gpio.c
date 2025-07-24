@@ -30,14 +30,14 @@ void set_alt_func(struct gpio *gpio_port, uint8_t pin_num, uint8_t af_num)
 {
 	pin_num &= (0x0fU & pin_num); // ensure pin num doesnt exceed 15.
 
-	// pins 0to 7 use AFRL. 8 to 15 use AFRH
+	// pins 0 to 7 use AFRL. 8 to 15 use AFRH
 	if (pin_num <= 7)
 	{
 		gpio_port->AFRL |= BIT(af_num);
 	}
 	else
 	{
-		gpio_port->AGRH |= BIT(af_num);
+		gpio_port->AFRH |= BIT(af_num);
 	}
 	
 }
