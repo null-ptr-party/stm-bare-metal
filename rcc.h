@@ -93,6 +93,6 @@ void set_sys_clk(uint8_t clksrc);
 
 // configure kernel clocks
 void cfg_krnl_clks(struct krnl_clk_cfg* cfg);
-void enable_uart3(void);
+void enable_usart3(void);
 
 #endif
