@@ -239,7 +239,7 @@ void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 
 }
 
-void enable_uart3(void)
+void enable_usart3(void)
 {
 	RCC->APB1LENR |= BIT(18);
 }
