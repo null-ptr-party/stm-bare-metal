@@ -25,14 +25,14 @@ struct usart_cfg
 // usart struct used for registers
 struct usart
 {
-	volatile uint32_t USART_CR1, USART_CR2, USART_CR3, USART_BRR,
+	volatile uint32_t USART_CR1, USART_CR2, USART_CR3, USART_BRR, USART_GTPR,
 	USART_RTOR, USART_RQR, USART_ISR, USART_ICR, USART_RDR, USART_TDR, USART_PRESC;
 };
 
 // Defines USARTs
-#define USART1 (struct usart *)0x40011000 // points to first register of USART (CR1)
-#define USART2 (struct usart *)0x40004400
-#define USART3 (struct usart *)0x40004800
+#define USART1 ((struct usart *)0x40011000) // points to first register of USART (CR1)
+#define USART2 ((struct usart *)0x40004400)
+#define USART3 ((struct usart *)0x40004800)
 // will define additional as needed
 
 // note stlink on usart3 which is pins PD8 PD9
@@ -41,6 +41,7 @@ struct usart
 void setup_usart(struct usart* usart, struct usart_cfg* cfg);
 void enable_tx(struct usart* usart);
 void disable_tx(struct usart* usart);
-void usart_transmit_byte(struct usart* usart, uint8_t byte);
+void usart_transmit_byte(struct usart* usart, char byte);
+void usart_transmit_bytes(struct usart* usart, char bytes[], uint32_t num_bytes);
 
 #endif
