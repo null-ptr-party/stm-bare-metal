@@ -33,11 +33,23 @@ void set_alt_func(struct gpio *gpio_port, uint8_t pin_num, uint8_t af_num)
 	// pins 0 to 7 use AFRL. 8 to 15 use AFRH
 	if (pin_num <= 7)
 	{
-		gpio_port->AFRL |= BIT(af_num);
+		gpio_port->AFRL |= (af_num << pin_num * 4);
 	}
 	else
 	{
-		gpio_port->AFRH |= BIT(af_num);
+		gpio_port->AFRH |= (af_num << (pin_num - 8) * 4);
 	}
 	
+}
+
+void set_gpio_pullup(struct gpio *gpio_port, uint8_t pin_num, enum pulltype pull_type)
+{
+	gpio_port->PUPDR &= ~(0x03U << (2 * pin_num)); // Clear bit
+	gpio_port->PUPDR |= (pull_type << (2 * pin_num)); // set mode by pin
+}
+
+void set_gpio_outtype(struct gpio *gpio_port, uint8_t pin_num, enum outtype outtype)
+{
+	gpio_port->OTYPER &= ~(0x01U << (pin_num)); // Clear bit
+	gpio_port->OTYPER |= (outtype << (pin_num)); // set mode by pin
 }

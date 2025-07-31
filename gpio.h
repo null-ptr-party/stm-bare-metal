@@ -18,7 +18,7 @@
 // AFRH: Alternate Function High. 31:0. See 11.4.10 of ref manual
 struct gpio
 {
-	volatile uint32_t MODER, TYPER, SPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH;
+	volatile uint32_t MODER, OTYPER, SPEEDR, PUPDR, IDR, ODR, BSRR, LCKR, AFRL, AFRH;
 };
 
 // GPIO macros
@@ -53,6 +53,11 @@ enum bank {
 	GPIO_BANK_H, GPIO_BANK_J = 10, GPIO_BANK_K = 11
 }; // Note between banks H and J there is a larger offset.
 
+enum pull_type
+{
+	NONE, PULLUP, PULLDOWN
+};
+
 // functions
 void set_gpio_mode(struct gpio *gpio_port, uint8_t pin_num, enum pinmode mode);
 
@@ -63,5 +68,9 @@ void set_gpio_output(struct gpio *gpio_port, uint8_t pin_num);
 void reset_gpio_output(struct gpio *gpio_port, uint8_t pin_num);
 
 void set_alt_func(struct gpio *gpio_port, uint8_t pin_num, uint8_t af_num);
+
+void set_gpio_pullup(struct gpio *gpio_port, uint8_t pin_num, enum pulltype pull_type);
+
+void set_gpio_outtype(struct gpio *gpio_port, uint8_t pin_num, enum outtype outtype);
 
 #endif
