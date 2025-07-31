@@ -42,6 +42,6 @@ void setup_usart(struct usart* usart, struct usart_cfg* cfg);
 void enable_tx(struct usart* usart);
 void disable_tx(struct usart* usart);
 void usart_transmit_byte(struct usart* usart, char byte);
-void usart_transmit_bytes(struct usart* usart, char bytes[], uint32_t num_bytes);
+void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes);
 
 #endif
