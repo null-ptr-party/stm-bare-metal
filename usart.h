@@ -43,5 +43,6 @@ void enable_tx(struct usart* usart);
 void disable_tx(struct usart* usart);
 void usart_transmit_byte(struct usart* usart, char byte);
 void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes);
-
+char usart_read_byte(struct usart*);
+void usart_read_bytes(struct usart* usart, char buff[], uint32_t buff_size, char termchar);
 #endif

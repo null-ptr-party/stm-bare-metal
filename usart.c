@@ -41,7 +41,47 @@ void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes)
 {
 	for (uint32_t byte_idx = 0; byte_idx < num_bytes; byte_idx++)
 	{
-		usart_transmit_byte(usart, bytes[byte_idx]);
+		usart_transmit_byte(usart, buff[byte_idx]);
 	}
 	while ((usart->USART_ISR & BIT(6)) == 0);
+}
+
+char usart_read_byte(struct usart* usart)
+{
+	while ((usart->USART_ISR & BIT(5)) == 0); // block until char received
+	// note below assumed 7 or 8 data bits. Note currently functional for 9.
+	return (char)(MASK(7) & usart->USART_RDR);
+}
+
+void usart_read_bytes(struct usart* usart, char buff[], uint32_t buff_size, char termchar)
+{
+	// this function reads until a user specified termintor termchar is found
+	// and places bytes in buffer buff. Each time a byte is read,
+	// the byte is placed in buffer and the buffer pointer incremented by one.
+	// if space remains in buffer, remaining elements are zeroed
+	// There should be no need to reset the pointer as it is passed by value.
+	// THIS FUNCTION DOES NOT CHECK IF num_bytes > len(buff).
+
+	char cur_byte = 0;
+	uint32_t byte_idx = 0;
+
+	for (; byte_idx < buff_size; byte_idx++)
+	{
+		cur_byte = usart_read_byte(usart);
+
+		if (cur_byte!=termchar) // end on termchar
+		{
+			buff[byte_idx] = cur_byte; // append data
+		}
+		else
+		{
+			// termchar not placed in buffer
+			break;
+		}
+	}
+
+	for (; byte_idx < buff_size; byte_idx++)
+	{
+		buff[byte_idx] = 0; // pad remainder of buff with 0s
+	}
 }
