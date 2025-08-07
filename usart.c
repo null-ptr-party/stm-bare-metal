@@ -37,9 +37,9 @@ void usart_transmit_byte(struct usart* usart, char byte)
 	while ((usart->USART_ISR & BIT(7)) == 0);
 }
 
-void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes)
+void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes, char termchar)
 {
-	for (uint32_t byte_idx = 0; byte_idx < num_bytes; byte_idx++)
+	for (uint32_t byte_idx = 0; ((byte_idx < num_bytes) || (buff[byte_idx] == termchar)); byte_idx++)
 	{
 		usart_transmit_byte(usart, buff[byte_idx]);
 	}
@@ -84,4 +84,40 @@ void usart_read_bytes(struct usart* usart, char buff[], uint32_t buff_size, char
 	{
 		buff[byte_idx] = 0; // pad remainder of buff with 0s
 	}
+}
+
+void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
+{
+	// this function continuously reads user input sent over usart, echoing recieved bytes
+	// by transmitting the same bytes back. if the user pushes backspace. the current byte
+	// is deleted. The loop exits when enter is depressed.
+	clear_buffer(buff, buffsize);
+
+	uint32_t in_idx = 0;
+	char byte = 0;
+
+	while (1)
+	{
+		byte = usart_read_byte(usart);
+
+		if (byte == '\n') break; // break if return encountered
+
+		if (byte == '\b')
+		{
+			buff[in_idx] = '\0'; // Null out char to delete
+		}
+		else if((in_idx != (buffsize - 1)))
+		{
+			buff[in_idx] = byte;
+			in_idx++;
+		}
+
+		usart_transmit_bytes(usart, buff, buffsize, '\0');
+	}
+
+}
+
+void clear_buffer(char buff[], uint32_t buffsize)
+{
+	for (uint32_t idx = 0; idx < buffsize; idx++) buff[idx] = 0;
 }

@@ -33,6 +33,7 @@ struct usart
 #define USART1 ((struct usart *)0x40011000) // points to first register of USART (CR1)
 #define USART2 ((struct usart *)0x40004400)
 #define USART3 ((struct usart *)0x40004800)
+#define USART_DEBUG USART3
 // will define additional as needed
 
 // note stlink on usart3 which is pins PD8 PD9
@@ -42,7 +43,9 @@ void setup_usart(struct usart* usart, struct usart_cfg* cfg);
 void enable_tx(struct usart* usart);
 void disable_tx(struct usart* usart);
 void usart_transmit_byte(struct usart* usart, char byte);
-void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes);
+void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes, char termchar);
 char usart_read_byte(struct usart*);
 void usart_read_bytes(struct usart* usart, char buff[], uint32_t buff_size, char termchar);
+void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize);
+void clear_buffer(char buff[], uint32_t buffsize);
 #endif
