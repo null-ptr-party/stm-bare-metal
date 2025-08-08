@@ -100,13 +100,18 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 	{
 		byte = usart_read_byte(usart);
 
-		if (byte == '\r') break; // break if return encountered
+		if (byte == '\r')
+		{
+			usart_transmit_bytes(usart, buff, buffsize, '\0');
+			break; // break if return encountered
+		}
 
 		if (byte == '\b')
 		{
 			buff[in_idx] = '\0'; // Null out char to delete
+			in_idx--;
 		}
-		else if((in_idx != (buffsize - 1)))
+		else if((in_idx <= (buffsize - 1)))
 		{
 			buff[in_idx] = byte;
 			usart_transmit_byte(usart, buff[in_idx]);
