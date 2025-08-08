@@ -17,7 +17,7 @@ void setup_usart(struct usart* usart, struct usart_cfg* cfg)
 	// keep stop bits at default (1) for now
 	// set stop bit placeholder
 	// enable usart
-	usart->USART_CR1 |= BIT(0) | BIT(3) | BIT(2);
+	usart->USART_CR1 |= BIT(0) | BIT(3) | BIT(2); // enable usart, rx, and tx
 
 }
 
