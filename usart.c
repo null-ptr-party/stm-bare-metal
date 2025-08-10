@@ -39,7 +39,7 @@ void usart_transmit_byte(struct usart* usart, char byte)
 
 void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes, char termchar)
 {
-	for (uint32_t byte_idx = 0; ((byte_idx < num_bytes) || (buff[byte_idx] == termchar)); byte_idx++)
+	for (uint32_t byte_idx = 0; ((byte_idx < num_bytes) && (buff[byte_idx] != termchar)); byte_idx++)
 	{
 		usart_transmit_byte(usart, buff[byte_idx]);
 	}
@@ -49,7 +49,7 @@ void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes, 
 char usart_read_byte(struct usart* usart)
 {
 	while ((usart->USART_ISR & BIT(5)) == 0); // block until char received
-	// note below assumed 7 or 8 data bits. Note currently functional for 9.
+	// note below assumed 7 or 8 data bits. Not currently functional for 9.
 	return (char)(MASK(7) & usart->USART_RDR);
 }
 
@@ -106,22 +106,21 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 			break; // break if return encountered
 		}
 
-		if (byte == '\b')
+		if ((byte == 0x7f) && (in_idx >= 1)) // 7f is delete code.
 		{
-			buff[in_idx] = '\0'; // Null out char to delete
 			in_idx--;
+			buff[in_idx] = '\0'; // Null out char to delete
+			usart_transmit_byte(usart, 0x7f);
+
 		}
-		else if((in_idx <= (buffsize - 1)))
+
+		else if(in_idx < (buffsize - 1)) // less than two so we dont overrun buffer
 		{
 			buff[in_idx] = byte;
-			usart_transmit_byte(usart, buff[in_idx]);
+			usart_transmit_byte(usart, buff[in_idx]); // need to fix this section. it can currently overrun buffer.
 			in_idx++;
 		}
-
-		//usart_transmit_bytes(usart, buff, buffsize, '\0');
-
 	}
-
 }
 
 void clear_buffer(char buff[], uint32_t buffsize)
