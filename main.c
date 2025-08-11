@@ -43,9 +43,10 @@ int main(void)
 	}
 
 
-	// setup pll1. 150 Mhz target
+	// setup pll1. 150 Mhz target. PLL div_fctrs cannot be 0.
 	struct pll_config pll1config = { .pll_prscl = 1U, .pll_src = PLL_SRC_HSE, .divp_en = TRUE, .divq_en = FALSE,
-		.divr_en = FALSE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_MED, .frac_en = FALSE, .div_fctr_p = 0x00, .pll_mult = 0x29};
+		.divr_en = FALSE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_MED, .frac_en = FALSE, .div_fctr_p = 1U,
+		.div_fctr_q = 1U, .div_fctr_r = 1U, .pll_mult = 30U};
 
 	cfg_pll(&pll1config, PLL1);
 	start_pll(PLL1);
@@ -60,7 +61,7 @@ int main(void)
 	// this is mainly driven by the desire to have an integer multiple of standard baud rates.
 	struct pll_config pll2config = { .pll_prscl = 1U, .pll_src = PLL_SRC_HSE, .divp_en = TRUE, .divq_en = TRUE,
 		.divr_en = TRUE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_WIDE, .frac_en = TRUE,
-		.div_fctr_p = 0x09U, .pll_mult = 0x4BU, .div_fctr_frac = 0x199AU, .div_fctr_q = 0x09U};
+		.div_fctr_p = 10U, .pll_mult = 76U, .div_fctr_frac = 6555U, .div_fctr_q = 10U, .div_fctr_r = 10U };
 
 	cfg_pll(&pll2config, PLL2);
 	start_pll(PLL2);
@@ -85,7 +86,7 @@ int main(void)
 
 	// =======================Setup Systick ==============================
 	struct systick_setup settings = { .ctr_enbl = CTR_ENABLE,
-	.excpt_enbl = EXCPT_ENBL, .clksrc = CLKSRC_PRC, .rld_val = 0x3D08F };
+	.excpt_enbl = EXCPT_ENBL, .clksrc = CLKSRC_PRC, .rld_val = 0x249f0 };
 
 	struct systick_setup* stg_ptr = &settings;
 
