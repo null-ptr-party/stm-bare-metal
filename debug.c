@@ -31,11 +31,11 @@ void memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uint32_
 
 void read_memrange(char buff[], uint32_t buffsize)
 {
-	uint32_t addr_start = 0, addrt_stop = 0; //used to store addresses.
+	uint32_t addr_start = 0, addr_stop = 0; //used to store addresses.
 	// requests range of memaddresses from user
 	usart_transmit_bytes(USART_DEBUG, "enter address in format: 0xstart 0xend\n\r\0", 100, '\0');
 	usart_read_with_echo(USART_DEBUG, buff, buffsize);
-	sscanf(buff, "0x%08lx 0x%08lx", &addr_start, &addrt_stop);
+	sscanf(buff, "0x%08lx 0x%08lx", &addr_start, &addr_stop);
 	memdump_range(addr_start, addrt_stop, buff, buffsize);
 	usart_transmit_bytes(USART_DEBUG, "\n\r\0", 50, '\0');
 	usart_transmit_bytes(USART_DEBUG, buff, buffsize, '\0');
