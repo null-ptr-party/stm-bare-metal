@@ -4,6 +4,8 @@
 #include "systick.h"
 #include "usart.h"
 #include "shared_tools.h"
+#include "pwr.h"
+#include "debug.h"
 
 // below are defined in linker script. Hence extern
 extern void _estack(void);
@@ -28,8 +30,10 @@ __attribute__((section(".vectors"))) void(*const table[16 + 163])(void) = {
 
 int main(void)
 {
+	enable_cfg();
+	//cfg_pwr_input();
+	//blk_til_actvos_rdy();
 	// =======================Configure clocks and pllss=============================
-
 	// start HSE
 	start_hse(TRUE);
 
@@ -38,9 +42,10 @@ int main(void)
 		;
 	}
 
-	// setup pll1. 250 Mhz target
+
+	// setup pll1. 150 Mhz target
 	struct pll_config pll1config = { .pll_prscl = 1U, .pll_src = PLL_SRC_HSE, .divp_en = TRUE, .divq_en = FALSE,
-		.divr_en = FALSE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_WIDE, .frac_en = FALSE, .div_fctr_p = 0x00, .pll_mult = 0x31};
+		.divr_en = FALSE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_MED, .frac_en = FALSE, .div_fctr_p = 0x00, .pll_mult = 0x29};
 
 	cfg_pll(&pll1config, PLL1);
 	start_pll(PLL1);
@@ -50,11 +55,12 @@ int main(void)
 		; // block until pll ready
 	}
 
-	// setup pll2 58,982,400 hz target. 11.79648 PLL multiplier. 11x multiplier 6525 fractional multiplier.
+	// setup pll2 384,000,000 hz target. 76.8 PLL multiplier. 11x multiplier 6525 fractional multiplier. Must be in range
+	// 192-836 Mhz
 	// this is mainly driven by the desire to have an integer multiple of standard baud rates.
 	struct pll_config pll2config = { .pll_prscl = 1U, .pll_src = PLL_SRC_HSE, .divp_en = TRUE, .divq_en = TRUE,
 		.divr_en = TRUE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_WIDE, .frac_en = TRUE,
-		.div_fctr_p = 0x00U, .pll_mult = 0x0AU, .div_fctr_frac = 0x186FU};
+		.div_fctr_p = 0x09U, .pll_mult = 0x4BU, .div_fctr_frac = 0x199AU, .div_fctr_q = 0x09U};
 
 	cfg_pll(&pll2config, PLL2);
 	start_pll(PLL2);
@@ -64,6 +70,10 @@ int main(void)
 		; // block until pll ready
 	}
 
+	// set VOS scaling for VOS2. Currently not working. Work around is to
+	// use valid levels for VOS3
+	//set_core_scl(VOS_SCALE_2);
+	//blk_til_vos_rdy();
 	//setup sysclk
 	set_sys_clk(SYSCLK_SRC_PLL1);
 
@@ -87,28 +97,56 @@ int main(void)
 	// setup gpio for user LED
 	enable_gpio_bank(ENABLE_PB); // Enable port B.
 	set_gpio_mode(GPIOB, 14U, GPIO_MODE_OUTPUT);
-
+	enable_gpio_bank(ENABLE_PC); // Enable port C.
+	set_gpio_mode(GPIOC, 9U, GPIO_MODE_ALT_FUNC);
+	set_gpio_speed(GPIOC, 9U, IOSPEED_VHIGH);
+	set_alt_func(GPIOC, 9U, AF0); // MCO output. PLL2
+	// setup GPIO for USARt
 	// setup gpio for tx/rx
 	enable_gpio_bank(ENABLE_PD);
 	// tx
 	set_gpio_mode(GPIOD, 8U, GPIO_MODE_ALT_FUNC);
-	set_alt_func(GPIOD, 8U, AF1);
+	set_gpio_speed(GPIOD, 8U, IOSPEED_VHIGH);
+	set_gpio_outtype(GPIOD, 8U, OUTTYPE_PUSHPULL);
+	set_gpio_pullup(GPIOD, 8U, PULLTYPE_NONE);
+	set_alt_func(GPIOD, 8U, AF7);
 	// rx
 	set_gpio_mode(GPIOD, 9U, GPIO_MODE_ALT_FUNC);
-	set_alt_func(GPIOD, 9U, AF1);
+	set_alt_func(GPIOD, 9U, AF7);
+	set_gpio_speed(GPIOD, 9U, IOSPEED_VHIGH);
+	set_gpio_mode(GPIOB, 8U, GPIO_MODE_OUTPUT);
+	set_gpio_speed(GPIOB, 8U, IOSPEED_VHIGH);
+
+	// set up MCO for debugging
+	set_mco_src(MCO2, MCO2_SRC_PLL2P);
+	set_mco_prsc(MCO1, 1);
+
+
 
 	// =======================End GPIO setup =============================
 
 	// ======================= USART Setup ===============================
-	struct usart_cfg usart_cfg = { .word_len = DATABITS8,.oversmpl_mthd = OVERSAMPLE16,.baud = 0x1800 }; // target baud 0x1800
+	// clock usart
+	enable_usart3();
+	wait_ms(10);
+	// 38.4 Mhz clock input to usart
+	struct usart_cfg usart_cfg = { .word_len = DATABITS8, .oversmpl_mthd = OVERSAMPLE16, .baud = 0x14DUL }; // target baud 0x1800
 	setup_usart(USART3, &usart_cfg);
-	enable_tx(USART3);
-
+	//enable_tx(USART3);
+	char inbuff[256] = { 0 };
+	//memdump_range(0x20000090U, 0x200000f0U, inbuff, 256U);
+	
 	while (1)
 	{
 		set_gpio_output(GPIOB, 14U);
+		//set_gpio_output(GPIOB, 8U); // systick debug
 		wait_ms(1000);
 		reset_gpio_output(GPIOB, 14U);
+		//reset_gpio_output(GPIOB, 8U);
+		//usart_read_with_echo(USART_DEBUG, inbuff, 256U);
+		read_memrange(inbuff, 256);
+		//usart_read_bytes(USART3, inbuff, 256, '\n');
+		//usart_read_bytes(USART3, inbuff, 256, '\r');
 		wait_ms(1000);
 	}
 	return 0;
