@@ -26,6 +26,9 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 {
 	//note that PLL macros are pll1 -> 0, pll2->1, pll3->2
 
+	// todo for PLL: need it to where user just enters the desired number for mult/div factor.
+	// for fractional, the value should be calculated from a double.
+
 	// set pll source clock and prescaler. note prescaler range is 1 to 63. 0 is precsaler disabled
 	RCC->PLLCKSELR &= ~(0x03U); // clear bits
 	RCC->PLLCKSELR |= (0x03U & config->pll_src); // set pll clock source.
@@ -61,8 +64,8 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 		if (config->frac_en)
 		{
 			// enable fractional bit
-			RCC->CFGR &= ~(BIT(0)); // note this is necessary since PLL sets on change from 0->1.
-			RCC->CFGR |= BIT(0);
+			RCC->PLLCFGR &= ~(BIT(0)); // note this is necessary since PLL sets on change from 0->1.
+			RCC->PLLCFGR |= BIT(0);
 			// set fractional part of multiplier if enabled
 			RCC->PLL1FRACR &= ~(0x1FFFU << 3); // Clear bit
 			RCC->PLL1FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
@@ -100,8 +103,8 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 		if (config->frac_en)
 		{
 			// enable fractional bit
-			RCC->CFGR &= ~(BIT(4)); // note this is necessary since PLL sets on change from 0->1.
-			RCC->CFGR |= BIT(4);
+			RCC->PLLCFGR &= ~(BIT(4)); // note this is necessary since PLL sets on change from 0->1.
+			RCC->PLLCFGR |= BIT(4);
 			// set fractional part of multiplier if enabled
 			RCC->PLL2FRACR &= ~(0x1FFFU << 3); // Clear bit
 			RCC->PLL2FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
@@ -140,8 +143,8 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 		if (config->frac_en)
 		{
 			// enable fractional bit
-			RCC->CFGR &= ~(BIT(8)); // note this is necessary since PLL sets on change from 0->1.
-			RCC->CFGR |= BIT(8);
+			RCC->PLLCFGR &= ~(BIT(8)); // note this is necessary since PLL sets on change from 0->1.
+			RCC->PLLCFGR |= BIT(8);
 			// set fractional part of multiplier if enabled
 			RCC->PLL3FRACR &= ~(0x1FFFU << 3); // Clear bit
 			RCC->PLL3FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
@@ -242,4 +245,40 @@ void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 void enable_usart3(void)
 {
 	RCC->APB1LENR |= BIT(18);
+}
+
+void enable_usart2(void)
+{
+	RCC->APB1LENR |= BIT(17);
+}
+
+// MCO.
+void set_mco_src(uint8_t mco, uint8_t src)
+{
+	// use mco macros
+	if (mco == MCO1)
+	{
+		RCC->CFGR &= ~(0x07U << 22U); // clear bits
+		RCC->CFGR |= ((0x07U & src) << 22U);
+	}
+	if (mco == MCO2)
+	{
+		RCC->CFGR &= ~(0x07U << 31U); // clear bits
+		RCC->CFGR |= ((0x07U & src) << 29U);
+	}
+}
+
+void set_mco_prsc(uint8_t mco, uint8_t prsc)
+{
+	// use mco macros
+	if (mco == MCO1)
+	{
+		RCC->CFGR &= ~(0x0FU << 18U); // clear bits
+		RCC->CFGR |= ((0xFU & prsc) << 18U);
+	}
+	if (mco == MCO2)
+	{
+		RCC->CFGR &= ~(0x0FU << 25U); // clear bits
+		RCC->CFGR |= ((0xFU & prsc) << 25U);
+	}
 }
