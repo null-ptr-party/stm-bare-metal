@@ -42,132 +42,65 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 	RCC->PLLCFGR &= ~(0x01U << (4 * (uint32_t)pll + 1U)); // clear bits
 	RCC->PLLCFGR |= ((0x01U & config->vco_rng) << (4 * (uint32_t)pll + 1U));
 
+	volatile uint32_t* divr_ptr = &RCC->PLL1DIVR;
+	volatile uint32_t* fracr_ptr = &RCC->PLL1FRACR;
+
+	// create handle to register for desired pll.
 	switch (pll)
 	{
 	case(PLL1):
-		// set pll multiplication factor (set vco)
-		// Note this must be set appropriately such that
-		// it is in the range set by VCO range.
-		// set pll multiplication factor (set vco).  Range is 1 to 512. note 0 is 1x
-		RCC->PLL1DIVR &= ~(0x1FFU);
-		RCC->PLL1DIVR |= (0x1FFU & config->pll_mult);
-		// set pll div factor for P output. Range is 1 to 128. note 0 is 1x
-		RCC->PLL1DIVR &= ~(0x7FU << 9U);
-		RCC->PLL1DIVR |= ((0x7FU & config->div_fctr_p) << 9U);
-		// set pll div factor for Q output
-		RCC->PLL1DIVR &= ~(0x7FU << 16U);
-		RCC->PLL1DIVR |= ((0x7FU & config->div_fctr_q) << 16U);
-		// set pll div factor for R output
-		RCC->PLL1DIVR &= ~(0x7FU << 24U);
-		RCC->PLL1DIVR |= ((0x7FU & config->div_fctr_r) << 24U);
-
-		if (config->frac_en)
-		{
-			// enable fractional bit
-			RCC->PLLCFGR &= ~(BIT(0)); // note this is necessary since PLL sets on change from 0->1.
-			RCC->PLLCFGR |= BIT(0);
-			// set fractional part of multiplier if enabled
-			RCC->PLL1FRACR &= ~(0x1FFFU << 3); // Clear bit
-			RCC->PLL1FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
-		}
-
-		// Enable outputs that are enabled in config struct
-		if (config->divp_en)
-		{
-			RCC->PLLCFGR |= BIT(16);
-		}
-		if (config->divq_en)
-		{
-			RCC->PLLCFGR |= BIT(17);
-		}
-		if (config->divr_en)
-		{
-			RCC->PLLCFGR |= BIT(18);
-		}
+		divr_ptr = &RCC->PLL1DIVR;
+		fracr_ptr = &RCC->PLL1FRACR;
 		break;
 
 	case(PLL2):
-		// set pll multiplication factor (set vco)
-		RCC->PLL2DIVR &= ~(0x1FFU);
-		RCC->PLL2DIVR |= (0x1FFU & config->pll_mult);
-		// set pll div factor for P output
-		RCC->PLL2DIVR &= ~(0x7FU << 9U);
-		RCC->PLL2DIVR |= ((0x7FU & config->div_fctr_p) << 9U);
-		// set pll div factor for Q output
-		RCC->PLL2DIVR &= ~(0x7FU << 16U);
-		RCC->PLL2DIVR |= ((0x7FU & config->div_fctr_q) << 16U);
-		// set pll div factor for R output
-		RCC->PLL2DIVR &= ~(0x7FU << 24U);
-		RCC->PLL2DIVR |= ((0x7FU & config->div_fctr_r) << 24U);
-
-		if (config->frac_en)
-		{
-			// enable fractional bit
-			RCC->PLLCFGR &= ~(BIT(4)); // note this is necessary since PLL sets on change from 0->1.
-			RCC->PLLCFGR |= BIT(4);
-			// set fractional part of multiplier if enabled
-			RCC->PLL2FRACR &= ~(0x1FFFU << 3); // Clear bit
-			RCC->PLL2FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
-		}
-
-		// Enable outputs that are enabled in config struct
-		if (config->divp_en)
-		{
-			RCC->PLLCFGR |= BIT(19);
-		}
-		if (config->divq_en)
-		{
-			RCC->PLLCFGR |= BIT(20);
-		}
-		if (config->divr_en)
-		{
-			RCC->PLLCFGR |= BIT(21);
-		}
-
+		divr_ptr = &RCC->PLL2DIVR;
+		fracr_ptr = &RCC->PLL2FRACR;
 		break;
 
 	case(PLL3):
-		// set pll multiplication factor (set vco)
-		RCC->PLL3DIVR &= ~(0x1FFU);
-		RCC->PLL3DIVR |= (0x1FFU & config->pll_mult);
-		// set pll div factor for P output
-		RCC->PLL3DIVR &= ~(0x7FU << 9U);
-		RCC->PLL3DIVR |= ((0x7FU & config->div_fctr_p) << 9U);
-		// set pll div factor for Q output
-		RCC->PLL3DIVR &= ~(0x7FU << 16U);
-		RCC->PLL3DIVR |= ((0x7FU & config->div_fctr_q) << 16U);
-		// set pll div factor for R output
-		RCC->PLL3DIVR &= ~(0x7FU << 24U);
-		RCC->PLL3DIVR |= ((0x7FU & config->div_fctr_r) << 24U);
-
-		if (config->frac_en)
-		{
-			// enable fractional bit
-			RCC->PLLCFGR &= ~(BIT(8)); // note this is necessary since PLL sets on change from 0->1.
-			RCC->PLLCFGR |= BIT(8);
-			// set fractional part of multiplier if enabled
-			RCC->PLL3FRACR &= ~(0x1FFFU << 3); // Clear bit
-			RCC->PLL3FRACR |= ((0x1FFFU & config->div_fctr_frac) << 3);
-		}
-
-		// Enable outputs that are enabled in config struct
-		if (config->divp_en)
-		{
-			RCC->PLLCFGR |= BIT(22);
-		}
-		if (config->divq_en)
-		{
-			RCC->PLLCFGR |= BIT(23);
-		}
-		if (config->divr_en)
-		{
-			RCC->PLLCFGR |= BIT(24);
-		}
-
+		divr_ptr = &RCC->PLL3DIVR;
+		fracr_ptr = &RCC->PLL3FRACR;
 		break;
 
 	default:
 		break;
+	}
+
+	*divr_ptr &= ~(0x1FFU);
+	*divr_ptr |= (0x1FFU & (config->pll_mult - 1)); // subtract 1 to make 1:1 match.
+	// set pll div factor for P output. Range is 1 to 128. note 0 is 1x. 
+	// ** important. 0 is not a valid option here. it will make it roll over
+	*divr_ptr &= ~(0x7FU << 9U);
+	*divr_ptr |= ((0x7FU & (config->div_fctr_p - 1)) << 9U); // subtract 1 to make 1:1 match.
+	// set pll div factor for Q output
+	*divr_ptr &= ~(0x7FU << 16U);
+	*divr_ptr |= ((0x7FU & (config->div_fctr_q - 1)) << 16U);
+	// set pll div factor for R output
+	*divr_ptr &= ~(0x7FU << 24U);
+	*divr_ptr |= ((0x7FU & (config->div_fctr_r - 1)) << 24U);
+
+	if (config->frac_en)
+	{
+		// enable fractional bit
+		RCC->PLLCFGR &= ~(BIT(4*pll)); // note this is necessary since PLL sets on change from 0->1.
+		RCC->PLLCFGR |= BIT(4*pll);
+		// set fractional part of multiplier if enabled
+		*fracr_ptr &= ~(0x1FFFU << 3); // Clear bit
+		*fracr_ptr |= ((0x1FFFU & config->div_fctr_frac) << 3);
+	}
+	// Enable outputs that are enabled in config struct
+	if (config->divp_en)
+	{
+		RCC->PLLCFGR |= BIT((16 + 3*pll));
+	}
+	if (config->divq_en)
+	{
+		RCC->PLLCFGR |= BIT((17 + 3*pll));
+	}
+	if (config->divr_en)
+	{
+		RCC->PLLCFGR |= BIT((18 + 3*pll));
 	}
 }
 
