@@ -5,7 +5,7 @@
 struct pwr
 {
 	volatile uint32_t PWR_CR1, PWR_CSR1, PWR_CR2, PWR_CR3,
-		PWR_CPUCR, PWR_D3CR, PWR_WKUPCR, PWR_WKUPFR, PWR_WKUPEPR;
+		PWR_CPUCR, RSVD0, PWR_D3CR, RSVD1, PWR_WKUPCR, PWR_WKUPFR, PWR_WKUPEPR;
 };
 
 #define PWR ((struct pwr*) 0x58024800)
@@ -14,6 +14,11 @@ struct pwr
 #define VOS_SCALE_1 3U
 #define VOS_SCALE_2 2U
 #define VOS_SCALE_3 1U
+
+// used for accessing vos without bit clear
+#define VOS_MASK 0xC000UL 
+// for accesing power registers
+#define PWR_CFG_MASK 0xFFFFFFFCUL
 
 // this function is used to set core
 // scaling. This is requried when increasing
@@ -28,5 +33,8 @@ void cfg_pwr_input(void);
 
 // blocks until actvos reg is read (1);
 void blk_til_actvos_rdy(void);
+
+// blocks until actvos reg is read (1);
+void cfgr_pwr(void);
 
 #endif
