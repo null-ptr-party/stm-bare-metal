@@ -18,7 +18,7 @@ struct pwr
 // used for accessing vos without bit clear
 #define VOS_MASK 0xC000UL 
 // for accesing power registers
-#define PWR_CFG_MASK 0xFFFFFFFCUL
+#define PWR_CFG_MASK 0x03UL
 
 // this function is used to set core
 // scaling. This is requried when increasing
@@ -33,8 +33,5 @@ void cfg_pwr_input(void);
 
 // blocks until actvos reg is read (1);
 void blk_til_actvos_rdy(void);
-
-// blocks until actvos reg is read (1);
-void cfgr_pwr(void);
 
 #endif

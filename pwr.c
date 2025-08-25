@@ -4,8 +4,13 @@
 
 void set_core_scl(uint8_t scale)
 {
-	PWR->PWR_D3CR |= ((0x03U & scale) << 14);
+	volatile uint32_t unused = 0;
+	PWR->PWR_D3CR = ((PWR->PWR_D3CR & ~VOS_MASK) | (scale << 14U));
+	unused = (PWR->PWR_D3CR & ~VOS_MASK); // read bit to delay.
+	(void)unused; // avoid compiler warn.
+	while ((PWR->PWR_D3CR & BIT(13)) == 0); // wait for VOSready.
 }
+
 void blk_til_vos_rdy(void)
 {
 	while ((PWR->PWR_D3CR & BIT(13)) == 0);
@@ -13,10 +18,15 @@ void blk_til_vos_rdy(void)
 
 void cfg_pwr_input(void)
 {
-	// hard code for now.
-	// Note: this register is weird and can only
-	// be cleared by a long hard reset (no power).
-	PWR->PWR_CR3 |= 0x06U;
+	// Important notes because STM332H7 documentation is
+	// kind of crap. The STM32H723 series does NOT have an
+	// SMPS converter, so the only bits avaialble for configuration
+	// are bypass and LDOEN. This hardcodes for LDOEN.
+	volatile uint32_t unused = 0;
+	PWR->PWR_CR3 = ((PWR->PWR_CR3 & ~PWR_CFG_MASK) | 0x02UL);
+	unused = PWR->PWR_CR3 & PWR_CFG_MASK; // readback val for delay
+	(void)unused;  // to prevent compiler complaint.
+	while ((PWR->PWR_CSR1 & BIT(13)) == 0); // wait till actvos is ready.
 }
 
 void blk_til_actvos_rdy(void)
