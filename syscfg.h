@@ -14,3 +14,15 @@ UR2, UR3, UR4, UR5, UR6, UR7, RSVD[3], UR11, UR12, UR13, UR14, UR15, UR16, UR17}
 
 // define syscfg struct
 #define ((struct SYSCFG *)0x58000400)
+
+#define EXTI_PORT_A 0UL
+#define EXTI_PORT_B 1UL
+#define EXTI_PORT_C 2UL
+#define EXTI_PORT_D 3UL
+#define EXTI_PORT_E 4UL
+#define EXTI_PORT_F 5UL
+#define EXTI_PORT_G 6UL
+#define EXTI_PORT_H 7UL
+#define EXTI_PORT_I 8UL
+
+void cfg_exti_interrupt(uint8_t port, uint8_t pin);
