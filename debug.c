@@ -36,7 +36,7 @@ void read_memrange(char buff[], uint32_t buffsize)
 	usart_transmit_bytes(USART_DEBUG, "enter address in format: 0xstart 0xend\n\r\0", 100, '\0');
 	usart_read_with_echo(USART_DEBUG, buff, buffsize);
 	sscanf(buff, "0x%08lx 0x%08lx", &addr_start, &addr_stop);
-	memdump_range(addr_start, addrt_stop, buff, buffsize);
+	memdump_range(addr_start, addr_stop, buff, buffsize);
 	usart_transmit_bytes(USART_DEBUG, "\n\r\0", 50, '\0');
 	usart_transmit_bytes(USART_DEBUG, buff, buffsize, '\0');
 }
