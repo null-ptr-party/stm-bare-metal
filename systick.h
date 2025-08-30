@@ -2,6 +2,7 @@
 #define SYSTICK_H
 
 #include <stdint.h>
+#include "shared_tools.h"
 
 // HSI x1 is 64MHz 1f3f value
 //============datatypes===================================
@@ -20,7 +21,6 @@ struct systick_setup
 };
 
 //============functions===================================
-#define BIT(x) (1U << x)
 #define CTR_ENABLE 1UL // Enable systick counter
 #define CTR_DISABLE 0UL // disable systick counter
 

@@ -1,5 +1,6 @@
 #include "systick.h"
 #include "rcc.h"
+#include <stdint.h>
 
 void set_systick_ctr(uint32_t ctr_status)
 {
@@ -42,9 +43,9 @@ void init_systick(struct systick_setup *setup)
 	// 3. Program control and status register
 	set_rld_val(setup->rld_val);
 	clear_systick();
-	//set_systick_clksrc(setup->clksrc);
-	//set_systick_excpt(setup->excpt_enbl);
-	//set_systick_ctr(setup->ctr_enbl);
+	set_systick_clksrc(setup->clksrc);
+	set_systick_excpt(setup->excpt_enbl);
+	set_systick_ctr(setup->ctr_enbl);
 	SYSTICK->CSR |= ((setup->ctr_enbl & BIT(0)) | ((setup->excpt_enbl << 1) & BIT(1)) | ((setup->clksrc << 2) & BIT(2)));
 	void enable_cfg(void);
 }
