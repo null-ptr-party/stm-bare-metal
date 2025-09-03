@@ -1,4 +1,4 @@
-#ifndef _EXIT_H
+#ifndef _EXTI_H
 #define _EXTI_H
 
 #include <stdint.h>
