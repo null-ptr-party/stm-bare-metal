@@ -8,14 +8,14 @@
 // and the STM32 programmer tool. Which shows does not show some of the registers
 // outlined in the reference manual.
 
-struct SYSCFG {
+struct syscfg {
 	volatile uint32_t RSVD0, PMCR, EXTICR1, EXTICR2, EXTICR3, EXTICR4,
-	RSVD1[2], CCCSR, CCVR, CCCR, RSVD1[62], PKGR, RSVD2[118], UR0, RSVD3,
-	UR2, UR3, UR4, UR5, UR6, UR7, RSVD[3], UR11, UR12, UR13, UR14, UR15, UR16, UR17;
+	RSVD1[2], CCCSR, CCVR, CCCR, RSVD2[62], PKGR, RSVD3[118], UR0, RSVD4,
+	UR2, UR3, UR4, UR5, UR6, UR7, RSVD5[3], UR11, UR12, UR13, UR14, UR15, UR16, UR17;
 };
 
 // define syscfg struct
-#define ((struct SYSCFG *)0x58000400)
+#define SYSCFG ((struct syscfg *)0x58000400)
 
 #define EXTI_PORT_A 0UL
 #define EXTI_PORT_B 1UL
