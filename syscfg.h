@@ -28,3 +28,5 @@ struct syscfg {
 #define EXTI_PORT_I 8UL
 
 void cfg_exti_interrupt(uint8_t port, uint8_t pin);
+
+#endif
