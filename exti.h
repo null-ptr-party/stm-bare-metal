@@ -20,3 +20,5 @@ struct EXTI {
 
 // used to configure interrupts.
 void cfg_interrupt(uint8_t line, uint8_t edgetype);
+
+#endif
