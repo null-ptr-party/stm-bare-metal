@@ -1,21 +1,23 @@
 #include "syscfg.h"
 
-void cfg_exti_interrupt(uint8_t port, uint8_t pin) // configure exti GPIO interrupt.
+void cfg_exti_interrupt(uint32_t port, uint32_t pin) // configure exti GPIO interrupt.
 {
+	uint32_t shift = pin % 4; // modulo pin to get correct offset for each register.
+
 	if (pin <= 3)
 	{
-		SYSCFG->EXTICR1 = ((SYSCFG->EXTICR1 & ~(0x0F << 4*pin)) | (port << 4*pin));
+		SYSCFG->EXTICR1 = ((SYSCFG->EXTICR1 & ~(0x0FU << 4*shift)) | (port << 4*shift));
 	}
 	else if (pin <= 7)
 	{
-		SYSCFG->EXTICR2 = ((SYSCFG->EXTICR2 & ~(0x0F << 4*pin)) | (port << 4*pin));
+		SYSCFG->EXTICR2 = ((SYSCFG->EXTICR2 & ~(0x0FU << 4*shift)) | (port << 4*shift));
 	}
 	else if (pin <= 11)
 	{
-		SYSCFG->EXTICR3 = ((SYSCFG->EXTICR3 & ~(0x0F << 4*pin)) | (port << 4*pin));
+		SYSCFG->EXTICR3 = ((SYSCFG->EXTICR3 & ~(0x0FU << 4*shift)) | (port << 4*shift));
 	}
 	else if (pin <= 15)
 	{
-		SYSCFG->EXTICR4 = ((SYSCFG->EXTICR4 & ~(0x0F << 4*pin)) | (port << 4*pin));
+		SYSCFG->EXTICR4 = ((SYSCFG->EXTICR4 & ~(0x0FU << 4*shift)) | (port << 4*shift));
 	}
 }
