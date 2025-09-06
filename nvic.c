@@ -2,9 +2,9 @@
 #include "shared_tools.h"
 
 // functions
-void unmask_interrupt(uint8_t interrupt_num)
+void unmask_interrupt(uint32_t interrupt_num)
 {
-	// enables NVIC.
+	// enables NVIC. Note accesses must be 32 bit aligned.
 	if (interrupt_num <= 31)
 	{
 		NVIC->ISER0 |= BIT(interrupt_num);
@@ -33,8 +33,12 @@ void unmask_interrupt(uint8_t interrupt_num)
 	{
 		NVIC->ISER6 |= BIT((interrupt_num % 32));
 	}
-	else
+	else if (interrupt_num <= 255)
 	{
 		NVIC->ISER6 |= BIT((interrupt_num % 32));
+	}
+	else
+	{
+		; // do nothing if input exceeds range.
 	}
 }
