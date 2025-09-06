@@ -2,7 +2,7 @@
 #include "shared_tools.h"
 
 // functions
-void enable_nvic(uint8_t interrupt_num)
+void unmask_interrupt(uint8_t interrupt_num)
 {
 	// enables NVIC.
 	if (interrupt_num <= 31)

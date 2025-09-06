@@ -22,6 +22,6 @@ struct nvic {
 #define NVIC ((struct nvic*)0xE000E004)
 
 // functions
-void enable_nvic(uint8_t interrupt_num);
+void unmask_interrupt(uint8_t interrupt_num);
 
 #endif
