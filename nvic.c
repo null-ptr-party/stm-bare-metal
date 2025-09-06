@@ -1,8 +1,10 @@
 #include "nvic.h"
+#include "shared_tools.h"
 
 // functions
 void enable_nvic(uint8_t interrupt_num)
 {
+	// enables NVIC.
 	if (interrupt_num <= 31)
 	{
 		NVIC->ISER0 |= BIT(interrupt_num);
