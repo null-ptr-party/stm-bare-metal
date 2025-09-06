@@ -33,7 +33,7 @@ void enable_nvic(uint8_t interrupt_num)
 	{
 		NVIC->ISER6 |= BIT((interrupt_num % 32));
 	}
-	else if (interrupt_num <= 255)
+	else
 	{
 		NVIC->ISER6 |= BIT((interrupt_num % 32));
 	}
