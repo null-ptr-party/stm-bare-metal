@@ -94,5 +94,29 @@ void set_sys_clk(uint8_t clksrc);
 // configure kernel clocks
 void cfg_krnl_clks(struct krnl_clk_cfg* cfg);
 void enable_usart3(void);
+void enable_usart2(void);
+
+// MCO.
+// MCO1
+#define MCO1 0U
+#define MCO2 1U
+
+#define MCO1_SRC_HSI 0U
+#define MCO1_SRC_LSE 1U
+#define MCO1_SRC_HSE 2U
+#define MCO1_SRC_PLL1Q 3U
+#define MCO1_SRC_HSI48 4U
+
+// MCO2
+#define MCO2_SRC_SYSCLK 0U
+#define MCO2_SRC_PLL2P 1U
+#define MCO2_SRC_HSE 2U
+#define MCO2_SRC_PLL1P 3U
+#define MCO2_SRC_CSI 4U
+#define MCO2_SRC_LSI 5U
+
+void set_mco_src(uint8_t mco, uint8_t src);
+
+void set_mco_prsc(uint8_t mco, uint8_t prscl);
 
 #endif
