@@ -45,7 +45,7 @@ void set_alt_func(struct gpio *gpio_port, uint8_t pin_num, uint8_t af_num)
 void set_gpio_pullup(struct gpio *gpio_port, uint8_t pin_num, enum pulltype pull_type)
 {
 	gpio_port->PUPDR &= ~(0x03U << (2 * pin_num)); // Clear bit
-	gpio_port->PUPDR |= (pull_type << (2 * pin_num)); // set mode by pin
+	gpio_port->PUPDR |= (pull_type << (2 * pin_num)); // set mode by in
 }
 
 void set_gpio_outtype(struct gpio *gpio_port, uint8_t pin_num, enum outtype outtype)
