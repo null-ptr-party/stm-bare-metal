@@ -152,10 +152,6 @@ int main(void)
 		//set_gpio_output(GPIOB, 8U); // systick debug
 		wait_ms(1000);
 		reset_gpio_output(GPIOB, 14U);
-		//reset_gpio_output(GPIOB, 8U);
-		//usart_read_with_echo(USART_DEBUG, inbuff, 256U);
-		//usart_read_bytes(USART3, inbuff, 256, '\n');
-		//usart_read_bytes(USART3, inbuff, 256, '\r');
 		wait_ms(1000);
 	}
 	return 0;
@@ -201,6 +197,7 @@ void wait_ms(uint32_t ms)
 
 void exti13_iqr(void)
 {
-	read_memrange(inbuff, 256);
 	EXTI->CPUPR1 |= BIT(13); // clear pending bit.
+	read_memrange(inbuff, 256);
+
 }
