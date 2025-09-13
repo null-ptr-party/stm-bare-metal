@@ -5,7 +5,19 @@ CFLAGS  ?=  -W -Wall -Wextra -Werror -Wundef -Wshadow -Wdouble-promotion \
 			-mcpu=cortex-m7 -mthumb -mfloat-abi=hard -mfpu=fpv5-d16\
 
 LDFLAGS ?= -T link.ld -nostartfiles -nolibc -specs=C:/msys64/mingw64/arm-none-eabi/lib/thumb/v7e-m+dp/hard/nano.specs -lgcc -Wl,--gc-sections -Wl,-Map=$@.map
-SOURCES = main.c gpio.c rcc.c systick.c usart.c pwr.c debug.c syscalls.c exti.c syscfg.c nvic.c
+SOURCES = main.c \
+gpio.c \
+rcc.c \
+systick.c \
+usart.c \
+pwr.c \
+debug.c \
+syscalls.c \
+exti.c \
+syscfg.c \
+nvic.c \
+tim.c \
+
 OUTNAME = firmware.elf
 	
 all: build extract
