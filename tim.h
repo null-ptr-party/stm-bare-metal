@@ -5,7 +5,7 @@
 
 // define adv_tim struct
 struct adv_tim {
-	volatile uin32_t CR1, CR2, SMCR, DIER, SR, EGR, CCMR1, CCMR2, CCER, CNT, PSC, ARR,
+	volatile uint32_t CR1, CR2, SMCR, DIER, SR, EGR, CCMR1, CCMR2, CCER, CNT, PSC, ARR,
 	RCR, CCR1, CCR2, CCR3, CCR4, BDTR, DCR, DMAR, CCMR3, CCR5, CCR6,
 	AF1, AF2, TISEL;
 };
