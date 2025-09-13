@@ -11,3 +11,5 @@ struct adv_tim {
 // define register macros for advanced tims 1/8
 #define TIM1 ((struct adv_tim*)0x40010000)
 #define TIM2 ((struct adv_tim*)0x40010400)
+
+#endif
