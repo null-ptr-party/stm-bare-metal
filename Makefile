@@ -31,7 +31,7 @@ extract: build
 #program: build extract
 #	st-flash --reset write firmware.bin 0x08000000
 
-clean :
+clean:
 	echo "Removing object files..."
 	rm -f *.o
 	echo "Removing .elf file..."
@@ -40,4 +40,5 @@ clean :
 	rm -f *.bin
 	echo "So Fresh!"
 
-#  export PATH=$PATH:/c/msys64/mingw64/bin
+set_path:
+	export PATH=$PATH:/c/msys64/mingw64/bin
