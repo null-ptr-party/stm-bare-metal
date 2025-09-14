@@ -119,4 +119,13 @@ void set_mco_src(uint8_t mco, uint8_t src);
 
 void set_mco_prsc(uint8_t mco, uint8_t prscl);
 
+//<=====================timers========================================================>
+// Adv Timer Defines
+#define ADV_TIM1 0
+#define ADV_TIM2 1
+
+// Adv Timer Enable
+void enable_adv_timer(uint8_t adv_tim);
+
+
 #endif

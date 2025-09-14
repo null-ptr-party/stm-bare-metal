@@ -28,7 +28,6 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 
 	// todo for PLL: need it to where user just enters the desired number for mult/div factor.
 	// for fractional, the value should be calculated from a double.
-
 	// set pll source clock and prescaler. note prescaler range is 1 to 63. 0 is precsaler disabled
 	RCC->PLLCKSELR &= ~(0x03U); // clear bits
 	RCC->PLLCKSELR |= (0x03U & config->pll_src); // set pll clock source.
@@ -214,4 +213,10 @@ void set_mco_prsc(uint8_t mco, uint8_t prsc)
 		RCC->CFGR &= ~(0x0FU << 25U); // clear bits
 		RCC->CFGR |= ((0xFU & prsc) << 25U);
 	}
+}
+
+// Timer functions
+void enable_adv_timer(uint8_t adv_tim)
+{
+	RCC->APB2ENR |= BIT(adv_tim);
 }
