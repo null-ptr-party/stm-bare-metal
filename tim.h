@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+/*Timer note: timers 1:8, 12:17 do not have kernel clocks, but instead
+utilize the bus clock frequency*/
+
 // define adv_tim struct
 struct adv_tim {
 	volatile uint32_t CR1, CR2, SMCR, DIER, SR, EGR, CCMR1, CCMR2, CCER, CNT, PSC, ARR,
