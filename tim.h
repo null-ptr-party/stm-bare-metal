@@ -19,6 +19,9 @@ struct adv_tim {
 
 // advances timer macros
 // mode macros
+#define TIMMODE_UPCOUNTER 0
+#define TIMMODE_DOWNCOUNTER 1
+// capture compare mode macros
 #define CC_MODE_OUTPUT 0U
 #define CC_MODE_INPUT_TI1 1U
 #define CC_MODE_INPUT_TI2 2U
@@ -47,6 +50,10 @@ struct adv_tim {
 #define TIM_POLARITY_INV 1
 
 // Advanced timer functions. Macros should be used for channels
+// enable atim counter
+void atim_ctr_enbl(struct adv_tim* atim_ptr, uint8_t mode);
+// set counter mode
+void set_atim_ctmode(struct adv_tim* atim_ptr, uint8_t mode);
 // set capture mode of advanced timer
 void set_atim_capmode(struct adv_tim* atim_ptr, uint8_t ch, uint8_t mode);
 // apply filter setting for timer

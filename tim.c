@@ -1,6 +1,19 @@
 #include "tim.h"
 
 // Advanced timer functions.
+// Todo: some of these functions are bloaty. Once we get a feel for the timer
+// we could get rid of them and put their code in a "setup function"
+
+// enable counter
+void atim_ctr_enbl(struct adv_tim* atim_ptr, uint8_t mode)
+{
+	atim_ptr->CR1 |= BIT(0);
+}
+// set counter mode
+void set_atim_ctmode(struct adv_tim* atim_ptr, uint8_t mode)
+{
+	atim_ptr->CR1 |= (mode * BIT(4U)); // set to downcounter when modemacro = 1
+}
 // Macros should be used for channels and mode selection
 void set_atim_capmode(struct adv_tim* atim_ptr, uint8_t ch, uint8_t mode)
 { // set atim capture mode.
