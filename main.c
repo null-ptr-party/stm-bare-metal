@@ -120,24 +120,25 @@ int main(void)
 
 	// =======================End GPIO setup =============================
 	// ======================= Interrupt Setup ===========================
+	
+	// setup interrupt for debug PC13
 	enable_cfg(); // enable syscfg in rcc
-	set_gpio_mode(GPIOC, 13U, GPIO_MODE_INPUT);
-	unmask_interrupt(40U);
+	set_gpio_mode(GPIOC, 13U, GPIO_MODE_INPUT); // gpio input conencted to bluehat button
+	unmask_interrupt(40U); // unmask the interrupt in nvic
 	cfg_exti_interrupt(EXTI_PORT_C, 13); // configure interrupt for pin13
 	cfg_interrupt(13, EDGETYPE_RISING); // unmask interrupt and set to rising edge.
-	
-	// set up interrupt for debug PC13
-	// set exti13 for port C
+
+	// ======================= End Interrupt Setup =======================
 
 	// ======================= USART Setup ===============================
-	// clock usart
-	enable_usart3();
+
+	enable_usart3(); // clock usart
 	wait_ms(10);
 	// 38.4 Mhz clock input to usart
 	struct usart_cfg usart_cfg = { .word_len = DATABITS8, .oversmpl_mthd = OVERSAMPLE16, .baud = 0x14DUL }; // target baud 0x1800
 	setup_usart(USART3, &usart_cfg);
-	//enable_tx(USART3);
-	//memdump_range(0x20000090U, 0x200000f0U, inbuff, 256U);
+
+	// ======================= End USART Setup ===========================
 	
 	while (1)
 	{
@@ -188,6 +189,7 @@ void wait_ms(uint32_t ms)
 	}
 }
 
+// interrupt definition for exti13
 void exti13_iqr(void)
 {
 	EXTI->CPUPR1 |= BIT(13); // clear pending bit.
