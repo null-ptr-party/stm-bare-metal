@@ -6,7 +6,7 @@
 // we could get rid of them and put their code in a "setup function"
 
 // enable counter
-void atim_ctr_enbl(struct adv_tim* atim_ptr, uint8_t mode)
+void atim_ctr_enbl(struct adv_tim* atim_ptr)
 {
 	atim_ptr->CR1 |= BIT(0);
 }
