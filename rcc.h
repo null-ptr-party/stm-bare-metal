@@ -47,8 +47,8 @@ void enable_cfg(void);
 #define PLL_IN_RNG_EIGHT_SIXTEEN 3U
 
 // vco range defines
-#define VCO_RNG_WIDE 0U
-#define VCO_RNG_MED 1U
+#define VCO_RNG_WIDE 0U // Range 192-836 MHz
+#define VCO_RNG_MED 1U // Range 150-420 Mhz
 
 // PLL number defines
 #define PLL1 0U
