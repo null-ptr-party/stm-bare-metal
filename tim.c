@@ -32,7 +32,7 @@ void set_atim_capmode(struct adv_tim* atim_ptr, uint8_t ch, uint8_t mode)
 
 void set_atim_filter(struct adv_tim* atim_ptr, uint8_t ch, uint8_t fset)
 { // sets atim filter setting. Must use macro for channel.
-	uint32_t fset_shifted = (fset << (ch*8 + 4)) // mode with shift applied for ch.
+	uint32_t fset_shifted = (fset << (ch*8 + 4)); // mode with shift applied for ch.
 
 	if (ch <= 1)
 	{
