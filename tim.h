@@ -19,8 +19,8 @@ struct adv_tim {
 
 // advances timer macros
 // mode macros
-#define TIMMODE_UPCOUNTER 0
-#define TIMMODE_DOWNCOUNTER 1
+#define TIMMODE_UPCOUNTER 0U
+#define TIMMODE_DOWNCOUNTER 1U
 // capture compare mode macros
 #define CC_MODE_OUTPUT 0U
 #define CC_MODE_INPUT_TI1 1U
@@ -46,8 +46,8 @@ struct adv_tim {
 #define TIM_CAPCOMP_CH6COMP 11U
 
 // polarity macro
-#define TIM_POLARITY_NORMAL 0
-#define TIM_POLARITY_INV 1
+#define TIM_POLARITY_NORMAL 0U
+#define TIM_POLARITY_INV 1U
 
 // Advanced timer functions. Macros should be used for channels
 // enable atim counter
