@@ -63,6 +63,6 @@ void set_atim_prescl(struct adv_tim* atim_ptr, uint8_t ch, uint8_t prscl);
 // enable capture compare. Recommend using macro
 void enable_atim_ch(struct adv_tim* atim_ptr, uint8_t ch);
 // set timer polarity
-void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity)
+void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity);
 
 #endif
