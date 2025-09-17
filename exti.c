@@ -3,13 +3,17 @@
 
 void cfg_interrupt(uint8_t line, uint8_t edgetype)
 {
-	// unmask interrupt
+	/* This function configures the exti interrupt, by
+	unmasking it, and setting the desired edge trigger type
+	*/
+
+	// unmask exti
 	if (line <= 31)
 	{
 		EXTI->CPUIMR1 |= BIT(line);
 
 		switch (edgetype)
-		{
+		{	// configure exti interrupt to desired edgetype.
 			case EDGETYPE_BOTH:
 				EXTI->RTSR1 |= BIT(line);
 				EXTI->FTSR1 |= BIT(line);
