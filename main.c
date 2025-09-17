@@ -1,14 +1,7 @@
 #include <stdint.h>
-#include "gpio.h"
-#include "rcc.h"
-#include "systick.h"
-#include "usart.h"
 #include "shared_tools.h"
-#include "pwr.h"
-#include "debug.h"
-#include "exti.h"
-#include "syscfg.h"
-#include "nvic.h"
+#include "h723_drivers.h"
+
 
 // below are defined in linker script. Hence extern
 extern void _estack(void);
