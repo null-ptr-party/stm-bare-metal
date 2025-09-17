@@ -1,4 +1,5 @@
 #include "tim.h"
+#include "shared_tools.h"
 
 // Advanced timer functions.
 // Todo: some of these functions are bloaty. Once we get a feel for the timer
