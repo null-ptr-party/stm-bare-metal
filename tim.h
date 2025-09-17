@@ -51,7 +51,7 @@ struct adv_tim {
 
 // Advanced timer functions. Macros should be used for channels
 // enable atim counter
-void atim_ctr_enbl(struct adv_tim* atim_ptr, uint8_t mode);
+void atim_ctr_enbl(struct adv_tim* atim_ptr);
 // set counter mode
 void set_atim_ctmode(struct adv_tim* atim_ptr, uint8_t mode);
 // set capture mode of advanced timer
