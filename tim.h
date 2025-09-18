@@ -14,13 +14,13 @@ struct adv_tim {
 };
 
 // define register macros for advanced tims 1/8
-#define TIM1 ((struct adv_tim*)0x40010000)
-#define TIM2 ((struct adv_tim*)0x40010400)
+#define ATIM1 ((struct adv_tim*)0x40010000)
+#define ATIM8 ((struct adv_tim*)0x40010400)
 
 // advances timer macros
 // mode macros
-#define TIMMODE_UPCOUNTER 0U
-#define TIMMODE_DOWNCOUNTER 1U
+#define TIMMODE_UPCOUNTER 0U // count up
+#define TIMMODE_DOWNCOUNTER 1U // count down
 // capture compare mode macros
 #define CC_MODE_OUTPUT 0U
 #define CC_MODE_INPUT_TI1 1U
