@@ -14,8 +14,8 @@ struct adv_tim {
 };
 
 // define register macros for advanced tims 1/8
-#define ATIM1 ((struct adv_tim*)0x40010000)
-#define ATIM8 ((struct adv_tim*)0x40010400)
+#define TIM1 ((struct adv_tim*)0x40010000)
+#define TIM8 ((struct adv_tim*)0x40010400)
 
 // advances timer macros
 // mode macros
