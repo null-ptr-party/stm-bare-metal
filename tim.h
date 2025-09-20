@@ -22,28 +22,44 @@ struct adv_tim {
 #define TIMMODE_UPCOUNTER 0U // count up
 #define TIMMODE_DOWNCOUNTER 1U // count down
 // capture compare mode macros
-#define CC_MODE_OUTPUT 0U
-#define CC_MODE_INPUT_TI1 1U
-#define CC_MODE_INPUT_TI2 2U
-#define CC_MODE_INPUT_TRC 3U
+// CC1 defines
+#define CC1_MODE_OUTPUT 0U
+#define CC1_MODE_INPUT_TI1 1U
+#define CC1_MODE_INPUT_TI2 2U
+#define CC1_MODE_INPUT_TRC 3U
+// CC2 defines
+#define CC2_MODE_OUTPUT 0U
+#define CC2_MODE_INPUT_TI2 1U
+#define CC2_MODE_INPUT_TI1 2U
+#define CC2_MODE_INPUT_TRC 3U
+// CC3 defines
+#define CC3_MODE_OUTPUT 0U
+#define CC3_MODE_INPUT_TI3 1U
+#define CC3_MODE_INPUT_TI4 2U
+#define CC3_MODE_INPUT_TRC 3U
+// CC4 defines
+#define CC4_MODE_OUTPUT 0U
+#define CC4_MODE_INPUT_TI4 1U
+#define CC4_MODE_INPUT_TI3 2U
+#define CC4_MODE_INPUT_TRC 3U
 
 // channel macros
 #define ATIM_CH1 0U
 #define ATIM_CH2 1U
 
 // capture compare ch macros
-#define TIM_CAPCOMP_CH1 0U
-#define TIM_CAPCOMP_CH1COMP 1U
-#define TIM_CAPCOMP_CH2 2U
-#define TIM_CAPCOMP_CH2COMP 3U
-#define TIM_CAPCOMP_CH3_EN 4U
-#define TIM_CAPCOMP_CH3COMP 5U
-#define TIM_CAPCOMP_CH4 6U
-#define TIM_CAPCOMP_CH4COMP 7U
-#define TIM_CAPCOMP_CH5 8U
-#define TIM_CAPCOMP_CH5COMP 9U
-#define TIM_CAPCOMP_CH6 10U
-#define TIM_CAPCOMP_CH6COMP 11U
+#define ATIM_CC1P 0U
+#define ATIM_CC1N 1U
+#define ATIM_CC2P 2U
+#define ATIM_CC2N 3U
+#define ATIM_CC3P 4U
+#define ATIM_CC3N 5U
+#define ATIM_CC4P 6U
+#define ATIM_CC4N 7U
+#define ATIM_CC5P 8U
+#define ATIM_CC5N 9U
+#define ATIM_CC6P 10U
+#define ATIM_CC6N 11U
 
 // polarity macro
 #define TIM_POLARITY_NORMAL 0U
