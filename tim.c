@@ -46,7 +46,7 @@ void set_atim_filter(struct adv_tim* atim_ptr, uint8_t ch, uint8_t fset)
 }
 
 void set_atim_prescl(struct adv_tim* atim_ptr, uint8_t ch, uint8_t prscl)
-{ // set atim prescaler.
+{	// set atim prescaler.
 	uint32_t prscl_shifted = (prscl << (8*ch + 2)); // mode with shift applied for ch.
 
 	if (ch <= 1)
@@ -62,11 +62,11 @@ void set_atim_prescl(struct adv_tim* atim_ptr, uint8_t ch, uint8_t prscl)
 
 // enable capture compare and set polarity. Recommend using macro
 void enable_atim_ch(struct adv_tim* atim_ptr, uint8_t ch)
-{ // Note macros should be used.
+{	// Note macros should be used.
 	atim_ptr->CCER |= BIT((2*ch));
 }
 
 void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity)
-{ // Note macros should be used.
+{	// Note macros should be used.
 	atim_ptr->CCER |= polarity*BIT((2*ch + 1));
 }
