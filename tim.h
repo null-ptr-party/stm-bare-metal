@@ -48,22 +48,28 @@ struct adv_tim {
 #define ATIM_CH2 1U
 
 // capture compare ch macros
-#define ATIM_CC1P 0U
-#define ATIM_CC1N 1U
-#define ATIM_CC2P 2U
-#define ATIM_CC2N 3U
-#define ATIM_CC3P 4U
-#define ATIM_CC3N 5U
-#define ATIM_CC4P 6U
-#define ATIM_CC4N 7U
-#define ATIM_CC5P 8U
-#define ATIM_CC5N 9U
-#define ATIM_CC6P 10U
-#define ATIM_CC6N 11U
+#define ATIM_CC1P 0U // Channel CC1P
+#define ATIM_CC1NP 1U // CC1 Complementary Output
+#define ATIM_CC2P 2U // Channel CC2P
+#define ATIM_CC2NP 3U // CC2 Complementary Output
+#define ATIM_CC3P 4U // Channel CC3P
+#define ATIM_CC3NP 5U // CC3 Complementary Output
+#define ATIM_CC4P 6U // CC4 CC4P
+#define ATIM_CC4NP 7U // Channel CC4P Complementary Output
+#define ATIM_CC5P 8U // Channel CC5P
+#define ATIM_CC5NP 9U // Channel CC5P Complementary Output
+#define ATIM_CC6P 10U // Channel CC6P
+#define ATIM_CC6NP 11U // Channel CC6P Complementary Output
 
 // polarity macro
 #define TIM_POLARITY_NORMAL 0U
 #define TIM_POLARITY_INV 1U
+
+// prescaler macro
+#define ATIM_PRSCL_EVERY_E 0 // capture every event
+#define ATIM_PRSCL_EVERY_2E 1 // capture every 2 events
+#define ATIM_PRSCL_EVERY_4E 2 // capture every 4 events
+#define ATIM_PRSCL_EVERY_8E 3 // capture every 8 events
 
 // Advanced timer functions. Macros should be used for channels
 // enable atim counter
