@@ -72,7 +72,9 @@ void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity)
 }
 
 uint16_t get_atim_capval(struct adv_tim* atim_ptr, uint8_t reg)
-{	// gets the value of the requested register for the specified atim.
+{	// gets the capture value of the requested register for the specified atim.
+	// each advanced tim has 6 capture/compare registers.
+
 	switch(reg)
 	{
 		case ATIM_CC_REG_1:
