@@ -95,6 +95,6 @@ void enable_atim_ch(struct adv_tim* atim_ptr, uint8_t ch);
 // set timer polarity
 void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity);
 // get capture/compare value
-uint16_t get_atim_capval(struct adv_tim* atim_ptr, uint8_t ch);
+uint16_t get_atim_capval(struct adv_tim* atim_ptr, uint8_t reg);
 
 #endif
