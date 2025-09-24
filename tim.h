@@ -71,6 +71,14 @@ struct adv_tim {
 #define ATIM_PRSCL_EVERY_4E 2 // capture every 4 events
 #define ATIM_PRSCL_EVERY_8E 3 // capture every 8 events
 
+// CC register macro
+#define ATIM_CC_REG_1 0 // Atim Capture/Compare register 1
+#define ATIM_CC_REG_2 1 // Atim Capture/Compare register 2
+#define ATIM_CC_REG_3 2 // Atim Capture/Compare register 3
+#define ATIM_CC_REG_4 3 // Atim Capture/Compare register 4
+#define ATIM_CC_REG_5 4 // Atim Capture/Compare register 5
+#define ATIM_CC_REG_6 5 // Atim Capture/Compare register 6
+
 // Advanced timer functions. Macros should be used for channels
 // enable atim counter
 void atim_ctr_enbl(struct adv_tim* atim_ptr);
@@ -86,5 +94,7 @@ void set_atim_prescl(struct adv_tim* atim_ptr, uint8_t ch, uint8_t prscl);
 void enable_atim_ch(struct adv_tim* atim_ptr, uint8_t ch);
 // set timer polarity
 void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity);
+// get capture/compare value
+uint16_t get_atim_capval(struct adv_tim* atim_ptr, uint8_t ch);
 
 #endif

@@ -70,3 +70,40 @@ void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity)
 {	// Note macros should be used.
 	atim_ptr->CCER |= polarity*BIT((2*ch + 1));
 }
+
+uint16_t get_atim_capval(struct adv_tim* atim_ptr, uint8_t reg)
+{	// gets the value of the requested register for the specified atim.
+	switch(reg)
+	{
+		case ATIM_CC_REG_1:
+			return atim_ptr->CCR1;
+			break;
+
+		case ATIM_CC_REG_2:
+			return atim_ptr->CCR2;
+			break;
+
+		case ATIM_CC_REG_3:
+
+			return atim_ptr->CCR3;
+			break;
+
+		case ATIM_CC_REG_4:
+			return atim_ptr->CCR4;
+			break;
+
+		case ATIM_CC_REG_5:
+			return atim_ptr->CCR5;
+			break;
+
+		case ATIM_CC_REG_6:
+			return atim_ptr->CCR6;
+			break;
+
+		default:
+			return atim_ptr->CCR1;
+			break;
+	}
+	
+
+}
