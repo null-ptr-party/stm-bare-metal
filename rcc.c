@@ -3,7 +3,8 @@
 #include "shared_tools.h"
 
 void enable_gpio_bank(enum gpio_enable port)
-{// RCC_C1_AHB4ENR register
+{	/* Enables the desired gpio port
+	in the RCC_C1_AHB4ENR register. */
 	RCC->C1_AHB4ENR &= ~(0x01U << port); // clear bit of interest. Leave others.
 	RCC->C1_AHB4ENR |= (0x01U << port);
 	// No return
@@ -11,12 +12,12 @@ void enable_gpio_bank(enum gpio_enable port)
 
 void enable_stlink(void)
 {
-	// uart 3 is connected to stlink
+	// uart 3 is connected to stlink. Nucleo board specific.
 	RCC->APB1LENR |= BIT(18);
 }
 
 void enable_cfg(void)
-{
+{	// enable syscfg.
 	RCC->APB4ENR &= ~(0x01U << 1);
 	RCC->APB4ENR |= (0x01U << 1);
 }
@@ -24,6 +25,9 @@ void enable_cfg(void)
 // configures PLL using pll_config struct
 void cfg_pll(struct pll_config* config, uint8_t pll)
 {
+	/* This function configures the target PLL based on the contents
+	of the config struct. Note that no div/multipliers in the struct
+	can be 0.*/
 	//note that PLL macros are pll1 -> 0, pll2->1, pll3->2
 
 	// todo for PLL: need it to where user just enters the desired number for mult/div factor.
@@ -107,15 +111,15 @@ void cfg_pll(struct pll_config* config, uint8_t pll)
 // PLL toggled on by separate function
 // 
 void start_pll(uint8_t pll)
-{
+{	// Start the target PLL
 	RCC->CR |= (0x01U << (2 * pll + 24U));
 }
 
 void start_hse(uint8_t bypass)
 {
-	// starts the HSE. Sets bypass bit if
-	// bypass is true. Note Nucleo board has
-	// clock supplied by stlink
+	/* starts the HSE. Sets bypass bit if
+	bypass is true. Note Nucleo board has
+	clock supplied by stlink and thus uses bypass. */
 	if (bypass)
 	{
 		RCC->CR |= BIT(18); // enable bypass
@@ -125,12 +129,14 @@ void start_hse(uint8_t bypass)
 }
 
 uint32_t hse_is_rdy(void)
-{
+{	/* Blocks until the high speed external oscillator
+	is ready*/
 	return (uint32_t)(0x01U & (RCC->CR >> 17U));
 }
 
 uint32_t pll_is_rdy(uint8_t pll)
-{
+{	/* Blocks until the target PLL
+	is ready*/
 	return (uint32_t)(0x01U & (RCC->CR >> (25 + 2 * pll)));
 }
 
@@ -142,7 +148,8 @@ void set_sys_clk(uint8_t clksrc)
 
 void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 {
-	// setup krnl clk for d1
+	/* Controls mux settings kernel clocks based off the contents of cfg struct.
+	see STM32H723ZG reference manual RCC section for mux options for each peripheral*/
 	uint32_t word = (0x03U & cfg->d1_fmc) | ((0x03U & cfg->d1_octospi) << 4) |
 		((0x03U & cfg->d1_sdmmc) << 17) | ((0x03U & cfg->d1_per_clk) << 28);
 
@@ -175,7 +182,7 @@ void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 }
 
 void enable_usart3(void)
-{
+{	
 	RCC->APB1LENR |= BIT(18);
 }
 
@@ -217,6 +224,6 @@ void set_mco_prsc(uint8_t mco, uint8_t prsc)
 
 // Timer functions
 void enable_adv_timer(uint8_t adv_tim)
-{
+{	// Enables the advanced timer 1 or 8.
 	RCC->APB2ENR |= BIT(adv_tim);
 }
