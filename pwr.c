@@ -4,6 +4,11 @@
 
 void set_core_scl(uint8_t scale)
 {
+	/* this function sets the desired voltage scaling for the core.
+	Note that certain clocks speeds cannot be reached without raising
+	the core scaling. Prior to using this functoin, the actvos ready flag
+	must be 1.
+	*/
 	volatile uint32_t unused = 0;
 	PWR->PWR_D3CR = ((PWR->PWR_D3CR & ~VOS_MASK) | (scale << 14U));
 	unused = (PWR->PWR_D3CR & ~VOS_MASK); // read bit to delay.
@@ -12,7 +17,7 @@ void set_core_scl(uint8_t scale)
 }
 
 void blk_til_vos_rdy(void)
-{
+{	// blocks until the voltage scaling is ready.
 	while ((PWR->PWR_D3CR & BIT(13)) == 0);
 }
 
@@ -30,6 +35,6 @@ void cfg_pwr_input(void)
 }
 
 void blk_til_actvos_rdy(void)
-{
+{	// block until the current vos setting is ready.
 	while ((PWR->PWR_CSR1 & BIT(13)) == 0);
 }
