@@ -3,17 +3,19 @@
 #include <stdint.h>
 
 void set_systick_ctr(uint32_t ctr_status)
-{
+{	// set the counter (enable/disable)
 	SYSTICK->CSR |= (uint32_t)ctr_status;
 }
 
 void set_systick_clksrc(uint32_t clksrc)
-{
+{	/* set the source of the systick counter.
+	can be external or processor clk*/
 	SYSTICK->CSR |= (uint32_t)(clksrc << 2);
 }
 
 void set_systick_excpt(uint32_t excpt_enbl)
-{
+{	/* enable systick exception. Enabling this will cause an exception
+	event to be generated when the counter resets. */
 	SYSTICK->CSR |= (uint32_t)(excpt_enbl << 1); // set bit
 }
 
@@ -24,7 +26,9 @@ void clear_systick(void)
 }
 
 void set_rld_val(uint32_t rld_val)
-{
+{	/* This sets the reload value for the systick counter. This 
+	setting and the clock speed determine the systick exception
+	call frequency. */
 	SYSTICK->RVR &= 0x000000U; // clear reload value
 	SYSTICK->RVR |= (0xFFFFFFU & rld_val); // set reload val
 }
