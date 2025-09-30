@@ -1,5 +1,6 @@
 #include "usart.h"
 #include "shared_tools.h"
+#include <stdio.h>
 
 // setup functions
 void setup_usart(struct usart* usart, struct usart_cfg* cfg)
@@ -22,23 +23,24 @@ void setup_usart(struct usart* usart, struct usart_cfg* cfg)
 }
 
 void enable_tx(struct usart* usart)
-{
+{	// enable usart transmit
 	usart->USART_CR1 |= BIT(3);
 }
 
 void disable_tx(struct usart* usart)
-{
+{	// disable usart transmit
 	usart->USART_CR1 &= ~BIT(3);
 }
 
 void usart_transmit_byte(struct usart* usart, char byte)
-{
+{	// transmit a byte over specified usart
 	usart->USART_TDR = byte;
 	while ((usart->USART_ISR & BIT(7)) == 0);
 }
 
 void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes, char termchar)
-{
+{	/* transmit bytes from buffer. The transmission will end when number of bytes is exceeded
+	or a termchar is encountered */
 	for (uint32_t byte_idx = 0; ((byte_idx < num_bytes) && (buff[byte_idx] != termchar)); byte_idx++)
 	{
 		usart_transmit_byte(usart, buff[byte_idx]);
@@ -126,6 +128,6 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 }
 
 void clear_buffer(char buff[], uint32_t buffsize)
-{
+{	// clears the buffer buff.
 	for (uint32_t idx = 0; idx < buffsize; idx++) buff[idx] = 0;
 }
