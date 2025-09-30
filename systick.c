@@ -4,19 +4,16 @@
 
 void set_systick_ctr(uint32_t ctr_status)
 {
-	//SYSTICK->CSR &= ((uint32_t)(~0x01U)); // clear bit
 	SYSTICK->CSR |= (uint32_t)ctr_status;
 }
 
 void set_systick_clksrc(uint32_t clksrc)
 {
-	//SYSTICK->CSR &= ((uint32_t)(~(0x01U << 2)));
 	SYSTICK->CSR |= (uint32_t)(clksrc << 2);
 }
 
 void set_systick_excpt(uint32_t excpt_enbl)
 {
-	//SYSTICK->CSR &= ((uint32_t)(~(0x01U << 1))); // clear bit
 	SYSTICK->CSR |= (uint32_t)(excpt_enbl << 1); // set bit
 }
 
