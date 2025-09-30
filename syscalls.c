@@ -1,8 +1,13 @@
 // Copyright (c) 2022 Cesanta Software Limited
 // All rights reserved
 
-#include <sys/stat.h>
+/*The following syscalls are borrowed from the baremetal programming guide here
+https://github.com/cpq/bare-metal-programming-guide/blob/main/steps/step-5-cmsis/syscalls.c
+These syscalls are required to use the newlib nano library that implements lightweight stdlib functions
+such as sprintf, that are adapted for MCU applications.
+*/
 
+#include <sys/stat.h>
 #include "usart.h"
 
 int _fstat(int fd, struct stat *st) {
