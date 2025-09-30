@@ -29,8 +29,7 @@ void set_rld_val(uint32_t rld_val)
 {	/* This sets the reload value for the systick counter. This 
 	setting and the clock speed determine the systick exception
 	call frequency. */
-	SYSTICK->RVR &= 0x000000U; // clear reload value
-	SYSTICK->RVR |= (0xFFFFFFU & rld_val); // set reload val
+	SYSTICK->RVR = (SYSTICK->RVR & ~0xFFFFFFU) | (0xFFFFFFU & rld_val); // set reload val
 }
 
 void init_systick(struct systick_setup *setup)
