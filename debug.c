@@ -4,13 +4,8 @@
 #include <string.h>
 #include "usart.h"
 
-void memdump(uint32_t addr, char buff[], uint32_t buffsize)
+void addr_contents_to_str(uint32_t addr, char buff[], uint32_t buffsize)
 {
-	// dumps contents of memory in range addr_start:add_stop (inclusive)
-	// psuedocode
-	// validate addresses provided
-	// Note if buffsize is not big enough, it will just truncate.
-
 	// below returns if any checks are violated
 	if ((addr + 4) > MEM_ADDR_MAX) return;
 	uint32_t* ptr = (uint32_t*)addr;
@@ -20,22 +15,23 @@ void memdump(uint32_t addr, char buff[], uint32_t buffsize)
 }
 
 uint32_t get_addr_contents(uint32_t addr, char buff[], uint32_t buffsize)
-{	// returns the contents of the supplied address.
+{
+	// below returns if any checks are violated
 	if ((addr + 4) > MEM_ADDR_MAX) return;
 	
 	return *(uint32_t*)addr; // cast integer as pointer and dereference.
 }
 
-void memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uint32_t buffsize)
+void ser_memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uint32_t buffsize)
 {
 	for (uint32_t* addr_ptr = (uint32_t*)addr_start; (uint32_t)addr_ptr <= addr_stop; addr_ptr += 4)
 	{
-		memdump((uint32_t)addr_ptr, buff, buffsize);
+		addr_contents_to_str((uint32_t)addr_ptr, buff, buffsize);
 		usart_transmit_bytes(USART_DEBUG, buff, 57U, '\0'); // snprintf null terminates output
 	}
 }
 
-void read_memrange(char buff[], uint32_t buffsize)
+void ser_memdump_range_req(char buff[], uint32_t buffsize)
 {
 	uint32_t addr_start = 0, addr_stop = 0; //used to store addresses.
 	// requests range of memaddresses from user
