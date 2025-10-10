@@ -91,7 +91,7 @@ void usart_read_bytes(struct usart* usart, char buff[], uint32_t buff_size, char
 void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 {
 	// this function continuously reads user input sent over usart, echoing recieved bytes
-	// by transmitting the same bytes back. if the user pushes backspace. the current byte
+	// by transmitting the same bytes back. If the user pushes backspace, the current byte
 	// is deleted. The loop exits when enter is depressed.
 	clear_buffer(buff, buffsize);
 
@@ -107,6 +107,7 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 			usart_transmit_bytes(usart, "\n\rReceived Command: ", 50, '\0');
 			usart_transmit_bytes(usart, buff, buffsize, '\0');
 			usart_transmit_bytes(usart, "\n\r", 50, '\0');
+			clear_buffer(buff, buffsize);
 			break; // break if return encountered
 		}
 
@@ -121,7 +122,7 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 		else if(in_idx < (buffsize - 1)) // less than two so we dont overrun buffer
 		{
 			buff[in_idx] = byte;
-			usart_transmit_byte(usart, buff[in_idx]); // need to fix this section. it can currently overrun buffer.
+			usart_transmit_byte(usart, buff[in_idx]);
 			in_idx++;
 		}
 	}
