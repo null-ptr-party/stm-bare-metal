@@ -19,6 +19,12 @@ void memdump(uint32_t addr, char buff[], uint32_t buffsize)
 		(uint32_t)ptr, ptr[0], ptr[1], ptr[2], ptr[3]);
 }
 
+uint32_t get_addr_contents(uint32_t addr, char buff[], uint32_t buffsize)
+{	// returns the contents of the supplied address.
+	if ((addr + 4) > MEM_ADDR_MAX) return;
+	
+	return *(uint32_t*)addr; // cast integer as pointer and dereference.
+}
 
 void memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uint32_t buffsize)
 {

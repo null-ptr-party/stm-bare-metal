@@ -6,4 +6,6 @@
 void memdump(uint32_t addr, char buff[], uint32_t buffsize);
 void memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uint32_t buffsize);
 void read_memrange(char buff[], uint32_t buffsize);
+uint32_t get_addr_contents(uint32_t addr, char buff[], uint32_t buffsize);
+
 #endif
