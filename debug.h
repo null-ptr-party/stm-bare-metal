@@ -1,7 +1,7 @@
 #ifndef _DEBUG_H
 #include <stdint.h>
 #define _DEBUG_H
-#define MEM_ADDR_MAX  0xD0000000
+#define MEM_ADDR_MAX  0xDFFFFFFF
 
 // converts contents of addr to string and writes to buffer
 void addr_contents_to_str(uint32_t addr, char buff[], uint32_t buffsize);
