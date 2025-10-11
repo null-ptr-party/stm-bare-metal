@@ -10,6 +10,6 @@ void ser_memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uin
 // returns user requested memrange over serial
 void ser_memdump_range_req(char buff[], uint32_t buffsize);
 // returns the contents of the supplied address.
-uint32_t get_addr_contents(uint32_t addr, char buff[], uint32_t buffsize);
+uint32_t get_addr_contents(uint32_t addr);
 
 #endif

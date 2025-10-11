@@ -14,7 +14,7 @@ void addr_contents_to_str(uint32_t addr, char buff[], uint32_t buffsize)
 		(uint32_t)ptr, ptr[0], ptr[1], ptr[2], ptr[3]);
 }
 
-uint32_t get_addr_contents(uint32_t addr, char buff[], uint32_t buffsize)
+uint32_t get_addr_contents(uint32_t addr)
 {
 	// below returns if any checks are violated
 	if ((addr + 4) > MEM_ADDR_MAX) return;
