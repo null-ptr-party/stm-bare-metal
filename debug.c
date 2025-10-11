@@ -14,12 +14,13 @@ void addr_contents_to_str(uint32_t addr, char buff[], uint32_t buffsize)
 		(uint32_t)ptr, ptr[0], ptr[1], ptr[2], ptr[3]);
 }
 
-uint32_t get_addr_contents(uint32_t addr)
+uint32_t get_addr_contents(uint32_t addr, uint32_t* result)
 {
-	// below returns if any checks are violated
-	if ((addr + 4) > MEM_ADDR_MAX) return;
+	// below returns 1 if address is out of range.
+	if (addr > MEM_ADDR_MAX) return 1;
 	
-	return *(uint32_t*)addr; // cast integer as pointer and dereference.
+	*result = *(uint32_t*)addr; // cast integer as pointer and dereference.
+	return 0;
 }
 
 void ser_memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uint32_t buffsize)
@@ -38,6 +39,6 @@ void ser_memdump_range_req(char buff[], uint32_t buffsize)
 	usart_transmit_bytes(USART_DEBUG, "enter address in format: 0xstart 0xend\n\r\0", 100, '\0');
 	usart_read_with_echo(USART_DEBUG, buff, buffsize);
 	sscanf(buff, "0x%08lx 0x%08lx", &addr_start, &addr_stop);
-	memdump_range(addr_start, addr_stop, buff, buffsize);
+	ser_memdump_range(addr_start, addr_stop, buff, buffsize);
 	usart_transmit_bytes(USART_DEBUG, "\n\r\0", 50, '\0');
 }
