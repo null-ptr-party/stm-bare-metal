@@ -107,7 +107,6 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 			usart_transmit_bytes(usart, "\n\rReceived Command: ", 50, '\0');
 			usart_transmit_bytes(usart, buff, buffsize, '\0');
 			usart_transmit_bytes(usart, "\n\r", 50, '\0');
-			clear_buffer(buff, buffsize);
 			break; // break if return encountered
 		}
 
