@@ -90,6 +90,10 @@ void set_atim_capmode(struct adv_tim* atim_ptr, uint8_t ch, uint8_t mode);
 void set_atim_filter(struct adv_tim* atim_ptr, uint8_t ch, uint8_t fset);
 // set capture signal prescaler
 void set_atim_prescl(struct adv_tim* atim_ptr, uint8_t ch, uint8_t prscl);
+// set clk prescaler
+void set_atim_clk_prscl(struct adv_tim* atim_ptr, uint16_t clk_prscl);
+// set repetition counter to cnt
+void set_atim_rep_cnt(struct adv_tim* atim_ptr, uint16_t cnt);
 // enable capture compare. Recommend using macro
 void enable_atim_ch(struct adv_tim* atim_ptr, uint8_t ch);
 // set timer polarity

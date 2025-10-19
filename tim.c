@@ -60,6 +60,11 @@ void set_atim_prescl(struct adv_tim* atim_ptr, uint8_t ch, uint8_t prscl)
 
 }
 
+void set_atim_clk_prscl(struct adv_tim* atim_ptr, uint16_t clk_prscl)
+{
+	atim_ptr->PSC = ((atim_ptr->PSC & ~0xFFFFU) | clk_prscl);
+}
+
 // enable capture compare and set polarity. Recommend using macro
 void enable_atim_ch(struct adv_tim* atim_ptr, uint8_t ch)
 {	// Note macros should be used.
@@ -69,6 +74,11 @@ void enable_atim_ch(struct adv_tim* atim_ptr, uint8_t ch)
 void set_atim_polarity(struct adv_tim* atim_ptr, uint8_t ch, uint8_t polarity)
 {	// Note macros should be used.
 	atim_ptr->CCER |= polarity*BIT((2*ch + 1));
+}
+
+void set_atim_rep_cnt(struct adv_tim* atim_ptr, uint16_t cnt)
+{
+	atim_ptr->RCR = ((atim_ptr->RCR & 0xFFFF0000) | cnt); // only write to bottom 16 bits.
 }
 
 uint16_t get_atim_capval(struct adv_tim* atim_ptr, uint8_t reg)
