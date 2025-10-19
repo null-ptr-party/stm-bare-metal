@@ -1,32 +1,15 @@
 #include <stdint.h>
+#include <stdio.h>
 #include "shared_tools.h"
 #include "h723_drivers.h"
 
-
-// below are defined in linker script. Hence extern
-extern void _estack(void);
-extern long _sdata, _edata, _sidata, _sbss, _ebss;
-
-// _reset is called on boot
-void _reset(void);
-
 // function prototypes:
 void cnt_down(volatile uint32_t cnt);
-void systick_handler(void);
 void wait_ms(uint32_t ms);
-void exti13_iqr(void);
 
 // Globals
 static volatile uint32_t s_ticks = 0;
 char inbuff[256] = { 0 };
-
-// Create section for NVIC vector table
-__attribute__((section(".vectors"))) void(*const table[16 + 163])(void) = {
-	// set _estack, reset to first elements of table.
-	_estack, _reset, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, systick_handler, // systick is the 16th word
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, exti13_iqr
-};
 
 int main(void)
 {
@@ -94,6 +77,12 @@ int main(void)
 	// setup gpio for user LED
 	enable_gpio_bank(ENABLE_PB); // Enable port B.
 	set_gpio_mode(GPIOB, 14U, GPIO_MODE_OUTPUT);
+	// enable gpio troubleshooting
+	set_gpio_mode(GPIOB, 4U, GPIO_MODE_OUTPUT);
+	set_gpio_speed(GPIOB, 4U, IOSPEED_VHIGH);
+	set_gpio_outtype(GPIOB, 4U, OUTTYPE_PUSHPULL);
+	set_gpio_pullup(GPIOB, 4U, PULLTYPE_NONE);
+	// setup port C
 	enable_gpio_bank(ENABLE_PC); // Enable port C.
 	set_gpio_mode(GPIOC, 9U, GPIO_MODE_ALT_FUNC);
 	set_gpio_speed(GPIOC, 9U, IOSPEED_VHIGH);
@@ -140,43 +129,54 @@ int main(void)
 
 	// ======================= End USART Setup ===========================
 	
+	// ======================= Timer Setup ===============================
+	
+	// Set up timer output
+	enable_gpio_bank(ENABLE_PE); // Enable port E.
+	set_gpio_mode(GPIOE, 9U, GPIO_MODE_ALT_FUNC); // Set pin to AF
+	set_gpio_speed(GPIOE, 9U, IOSPEED_VHIGH);
+	set_alt_func(GPIOE, 9U, AF1); // Timer input
+
+	enable_adv_timer(RCC_EN_ADV_TIM1); // enable timer in rcc
+	set_atim_ctmode(TIM1, TIMMODE_UPCOUNTER);
+	set_atim_capmode(TIM1, ATIM_CC1P, CC1_MODE_INPUT_TI1);
+	enable_atim_ch(TIM1, ATIM_CC1P);
+	set_atim_polarity(TIM1, ATIM_CC1P, TIM_POLARITY_NORMAL);
+	set_atim_prescl(TIM1, ATIM_CC1P, ATIM_PRSCL_EVERY_E);
+	set_atim_clk_prscl(TIM1, 49);
+	set_atim_rep_cnt(TIM1,0);
+	atim_ctr_enbl(TIM1);
+
+	// setup tim1
+	uint16_t capture = 0;
+
 	while (1)
 	{
-		set_gpio_output(GPIOB, 14U);
+		//set_gpio_output(GPIOB, 14U);
+		
 		//set_gpio_output(GPIOB, 8U); // systick debug
-		wait_ms(1000);
+		//wait_ms(1000);
+		//reset_gpio_output(GPIOB, 14U);
+		//wait_ms(1000);
+		set_gpio_output(GPIOB, 4U);
+		capture = get_atim_capval(TIM1, ATIM_CC_REG_1); // discard every other reading
+		wait_ms(1);
+		reset_gpio_output(GPIOB, 4U);
+		wait_ms(1);
+		set_gpio_output(GPIOB, 4U);
+		capture = get_atim_capval(TIM1, ATIM_CC_REG_1) - capture;
+		// (void)get_addr_contents((uint32_t)&(TIM1->CCR1), &capture); need to unit test this.
+		(void)snprintf(inbuff, 256, "%u\n\r", capture);
+		usart_transmit_bytes(USART_DEBUG, inbuff, 10, '\0'); // need to fix
 		reset_gpio_output(GPIOB, 14U);
-		wait_ms(1000);
+		
 	}
 	return 0;
-}
-
-// function
-__attribute__((naked, noreturn)) void _reset(void)
-{
-	for (long *dst = &_sdata, *source = &_sidata; dst < &_edata;)
-	{
-		*dst++ = *source++; // Copy data from flash to RAM
-	}
-
-	for (long *ptr = &_sbss; ptr < &_ebss; ptr++)
-	{ 
-		*ptr = 0; // zero sbss data in RAM
-	}
-
-	main(); // call main
-
-	for (;;) (void) 0; // loop forever if main returns.
 }
 
 void cnt_down(volatile uint32_t cnt)
 {
 	while (cnt--) (void) 0;
-}
-
-void systick_handler(void)
-{
-	s_ticks++;
 }
 
 void wait_ms(uint32_t ms)
@@ -189,10 +189,16 @@ void wait_ms(uint32_t ms)
 	}
 }
 
+// <============================== definitions for interrupt handler functions ============================================>
+// systick handler definition
+void systick_handler(void)
+{
+	s_ticks++;
+}
+
 // interrupt definition for exti13
 void exti13_iqr(void)
 {
 	EXTI->CPUPR1 |= BIT(13); // clear pending bit.
-	read_memrange(inbuff, 256);
-
+	ser_memdump_range_req(inbuff, 256);
 }
