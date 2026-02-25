@@ -27,17 +27,27 @@ struct gptim {
 
 // define register macros for general purpose timers
 // 2, 3, 4, 5, 23, and 24
-#define TIM2 ((struct gptim*)0x400003FF)
+#define TIM2 ((struct gptim*)0x40000000)
 #define TIM3 ((struct gptim*)0x40000400)
 #define TIM4 ((struct gptim*)0x40000800)
-#define TIM5 ((struct gptim*)0x40000800)
+#define TIM5 ((struct gptim*)0x40000C00)
 #define TIM23 ((struct gptim*)0x4000E000)
-#define TIM24 ((struct gptim*)0x4000e400)
+#define TIM24 ((struct gptim*)0x4000E400)
 
-// advances timer macros
+// define argument macros common to all timers
 // mode macros
 #define TIMMODE_UPCOUNTER 0U // count up
 #define TIMMODE_DOWNCOUNTER 1U // count down
+
+// define gptim argument macros
+
+// define sms modes for GPTIM
+#define GPTIM_SMS_DISABLED 0U
+#define GPTIM_SMS_ENC1 1U
+#define GPTIM_SMS_ENC2 2U
+#define GPTIM_SMS_ENC3 3U
+
+// advances timer argument macros
 // capture compare mode macros
 // CC1 defines
 #define CC1_MODE_OUTPUT 0U
@@ -95,6 +105,13 @@ struct gptim {
 #define ATIM_CC_REG_4 3 // Atim Capture/Compare register 4
 #define ATIM_CC_REG_5 4 // Atim Capture/Compare register 5
 #define ATIM_CC_REG_6 5 // Atim Capture/Compare register 6
+
+// general purpose timer functions. Macros should be used for channels
+void gptim_ctr_enbl(struct gptim* gptim_ptr);
+// set general purpose timer reload value
+void gptim_set_rld_val(struct gptim* gptim_ptr, uint32_t rld_val);
+// set slave mode
+void gptim_set_slave_mode(struct gptim* gptim_ptr, uint8_t mode);
 
 // Advanced timer functions. Macros should be used for channels
 // enable atim counter

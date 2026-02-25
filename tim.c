@@ -1,6 +1,24 @@
 #include "tim.h"
 #include "shared_tools.h"
 
+// General purpose timer functions.
+// enable the counter
+void gptim_ctr_enbl(struct gptim* gptim_ptr)
+{
+	gptim_ptr->CR1 |= BIT(1U);
+}
+// set general purpose timer reload value.
+// note that only counters 2, 5, 23, and 24 can
+// hold full 32 bit reload value.
+void gptim_set_rld_val(struct gptim* gptim_ptr, uint32_t rld_val)
+{
+	gptim_ptr->ARR = rld_val;
+}
+// set slave mode
+void gptim_set_slave_mode(struct gptim* gptim_ptr, uint8_t mode)
+{
+	gptim_ptr->SMCR |= (((mode & 0x08) << 15) | (mode & 0x07));
+}
 // Advanced timer functions.
 // Todo: some of these functions are bloaty. Once we get a feel for the timer
 // we could get rid of them and put their code in a "setup function"
