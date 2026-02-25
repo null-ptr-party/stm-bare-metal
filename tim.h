@@ -25,6 +25,15 @@ struct gptim {
 #define TIM1 ((struct adv_tim*)0x40010000)
 #define TIM8 ((struct adv_tim*)0x40010400)
 
+// define register macros for general purpose timers
+// 2, 3, 4, 5, 23, and 24
+#define TIM2 ((struct gptim*)0x400003FF)
+#define TIM3 ((struct gptim*)0x40000400)
+#define TIM4 ((struct gptim*)0x40000800)
+#define TIM5 ((struct gptim*)0x40000800)
+#define TIM23 ((struct gptim*)0x4000E000)
+#define TIM24 ((struct gptim*)0x4000e400)
+
 // advances timer macros
 // mode macros
 #define TIMMODE_UPCOUNTER 0U // count up
