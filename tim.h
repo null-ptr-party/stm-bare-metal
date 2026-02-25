@@ -13,6 +13,14 @@ struct adv_tim {
 	AF1, AF2, TISEL;
 };
 
+// define general purpose timer struct
+// register definitions on page 1706 of
+// reference manual
+struct gptim {
+	volatile uint32_t CR1, CR2, SMCR, DIER, SR, EGR, CCMR1, CCMR2, CCER, CNT, PSC, ARR,
+	RSV1, CCR1, CCR2, CCR3, CCR4, RSV2, DCR, DMAR, RSV3[4], AF1, TISEL;
+};
+
 // define register macros for advanced tims 1/8
 #define TIM1 ((struct adv_tim*)0x40010000)
 #define TIM8 ((struct adv_tim*)0x40010400)
