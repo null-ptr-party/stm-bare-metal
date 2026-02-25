@@ -223,7 +223,14 @@ void set_mco_prsc(uint8_t mco, uint8_t prsc)
 }
 
 // Timer functions
+// advanced timers
 void enable_adv_timer(uint8_t adv_tim)
 {	// Enables the advanced timer 1 or 8.
 	RCC->APB2ENR |= BIT(adv_tim);
+}
+
+// general purpose timer
+void enable_gptimer(uint8_t gptimer)
+{
+	RCC->APB1LENR |= BIT(gptimer);
 }

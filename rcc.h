@@ -127,5 +127,17 @@ void set_mco_prsc(uint8_t mco, uint8_t prscl);
 // Adv Timer Enable
 void enable_adv_timer(uint8_t adv_tim);
 
+// general purpose timer defines
+#define RCC_EN_GPTIM2 0U
+#define RCC_EN_GPTIM3 1U
+#define RCC_EN_GPTIM4 2U
+#define RCC_EN_GPTIM5 3U
+#define RCC_EN_GPTIM6 4U
+#define RCC_EN_GPTIM7 5U
+#define RCC_EN_GPTIM12 6U
+#define RCC_EN_GPTIM13 7U
+#define RCC_EN_GPTIM14 8U
+// General purpose timer enable
+void enable_gptimer(uint8_t gptim);
 
 #endif
