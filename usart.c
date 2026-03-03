@@ -92,8 +92,12 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 {
 	// this function continuously reads user input sent over usart, echoing recieved bytes
 	// by transmitting the same bytes back. If the user pushes backspace, the current byte
-	// is deleted. The loop exits when enter is depressed.
+	// is deleted. The loop exits when enter is depressed.0x
 	clear_buffer(buff, buffsize);
+	if (!rx_empty(usart))
+	{
+		(void)usart_read_byte(usart); // read and discard any byte in data register.
+	}
 
 	uint32_t in_idx = 0;
 	char byte = 0;
@@ -125,6 +129,11 @@ void usart_read_with_echo(struct usart* usart, char buff[], uint32_t buffsize)
 			in_idx++;
 		}
 	}
+}
+
+uint8_t rx_empty(struct usart* usart)
+{
+	return (uint8_t)!(usart->USART_ISR & BIT(5));
 }
 
 void clear_buffer(char buff[], uint32_t buffsize)
