@@ -39,8 +39,21 @@ struct gptim {
 #define TIMMODE_UPCOUNTER 0U // count up
 #define TIMMODE_DOWNCOUNTER 1U // count down
 
-// define gptim argument macros
+// capture compare channel definitions
+#define CC_CH1 0U
+#define CC_CH2 1U
+#define CC_CH3 2U
+#define CC_CH4 3U
 
+// CC mode defines
+#define CC_MODE_OUTPUT 0U // set channel as output
+#define CC_MODE_SELF 1U // set mode to input associated with programmed channel
+// for example CC1 using mode self would using TI1, while mode cross would use
+// TI2.
+#define CC_MODE_CROSS 2U
+#define CC_MODE_INPUT_TRC 3U
+
+// define gptim argument macros
 // define sms modes for GPTIM
 #define GPTIM_SMS_DISABLED 0U
 #define GPTIM_SMS_ENC1 1U
@@ -49,27 +62,6 @@ struct gptim {
 
 // advances timer argument macros
 // capture compare mode macros
-// CC1 defines
-#define CC1_MODE_OUTPUT 0U
-#define CC1_MODE_INPUT_TI1 1U
-#define CC1_MODE_INPUT_TI2 2U
-#define CC1_MODE_INPUT_TRC 3U
-// CC2 defines
-#define CC2_MODE_OUTPUT 0U
-#define CC2_MODE_INPUT_TI2 1U
-#define CC2_MODE_INPUT_TI1 2U
-#define CC2_MODE_INPUT_TRC 3U
-// CC3 defines
-#define CC3_MODE_OUTPUT 0U
-#define CC3_MODE_INPUT_TI3 1U
-#define CC3_MODE_INPUT_TI4 2U
-#define CC3_MODE_INPUT_TRC 3U
-// CC4 defines
-#define CC4_MODE_OUTPUT 0U
-#define CC4_MODE_INPUT_TI4 1U
-#define CC4_MODE_INPUT_TI3 2U
-#define CC4_MODE_INPUT_TRC 3U
-
 // channel macros
 #define ATIM_CH1 0U
 #define ATIM_CH2 1U
@@ -112,6 +104,10 @@ void gptim_ctr_enbl(struct gptim* gptim_ptr);
 void gptim_set_rld_val(struct gptim* gptim_ptr, uint32_t rld_val);
 // set slave mode
 void gptim_set_slave_mode(struct gptim* gptim_ptr, uint8_t mode);
+// set capture mode
+void gptim_set_capmode(struct gptim* gptim_ptr, uint8_t ch, uint8_t mode);
+// get count value
+uint32_t gptim_get_cnt(struct gptim* gptim_ptr);
 
 // Advanced timer functions. Macros should be used for channels
 // enable atim counter

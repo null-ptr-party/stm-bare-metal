@@ -5,7 +5,7 @@
 // enable the counter
 void gptim_ctr_enbl(struct gptim* gptim_ptr)
 {
-	gptim_ptr->CR1 |= BIT(1U);
+	gptim_ptr->CR1 |= BIT(0U);
 }
 // set general purpose timer reload value.
 // note that only counters 2, 5, 23, and 24 can
@@ -18,6 +18,41 @@ void gptim_set_rld_val(struct gptim* gptim_ptr, uint32_t rld_val)
 void gptim_set_slave_mode(struct gptim* gptim_ptr, uint8_t mode)
 {
 	gptim_ptr->SMCR |= (((mode & 0x08) << 15) | (mode & 0x07));
+}
+// set capture mode
+// set capture mode
+void gptim_set_capmode(struct gptim* gptim_ptr, uint8_t ch, uint8_t mode)
+{
+	uint32_t mode_shifted = (mode << (8 *(ch % 2))); // mode with shift applied for ch.
+
+	if (ch <= 1)
+	{
+		gptim_ptr->CCMR1 = ((gptim_ptr->CCMR1 & ~(mode_shifted)) | (mode_shifted));
+	}
+	else if (ch <= 3)
+	{
+		gptim_ptr->CCMR2 = ((gptim_ptr->CCMR2 & ~(mode_shifted)) | (mode_shifted));
+	}
+}
+
+// get count value
+uint32_t gptim_get_cnt(struct gptim* gptim_ptr)
+{
+	// TIM 2,5, 23, 24 are full 32 bit counter
+	// other counters are only 16.
+	if ((gptim_ptr == TIM2) ||
+		(gptim_ptr == TIM5) ||
+		(gptim_ptr == TIM23) ||
+		(gptim_ptr == TIM24))
+	{
+		return gptim_ptr->CNT;
+	}
+	else
+	{
+		// return only 16 bits
+		return (0xffff & gptim_ptr->CNT);
+	}
+
 }
 // Advanced timer functions.
 // Todo: some of these functions are bloaty. Once we get a feel for the timer
