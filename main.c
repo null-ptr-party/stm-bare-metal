@@ -102,6 +102,14 @@ int main(void)
 	set_gpio_speed(GPIOD, 9U, IOSPEED_VHIGH);
 	set_gpio_mode(GPIOB, 8U, GPIO_MODE_OUTPUT);
 	set_gpio_speed(GPIOB, 8U, IOSPEED_VHIGH);
+	// timer GPIO
+	enable_gpio_bank(ENABLE_PA);
+	// tim 2 channel 1
+	set_gpio_mode(GPIOA, 0U, GPIO_MODE_ALT_FUNC);
+	set_alt_func(GPIOA, 0U, AF1);
+	// tim 2 channel 2
+	set_gpio_mode(GPIOB, 3U, GPIO_MODE_ALT_FUNC);
+	set_alt_func(GPIOB, 3U, AF1);
 
 	// set up MCO for debugging
 	set_mco_src(MCO2, MCO2_SRC_PLL2P);
@@ -130,45 +138,41 @@ int main(void)
 	// ======================= End USART Setup ===========================
 	
 	// ======================= Timer Setup ===============================
-	
-	// Set up timer output
-	enable_gpio_bank(ENABLE_PE); // Enable port E.
-	set_gpio_mode(GPIOE, 9U, GPIO_MODE_ALT_FUNC); // Set pin to AF
-	set_gpio_speed(GPIOE, 9U, IOSPEED_VHIGH);
-	set_alt_func(GPIOE, 9U, AF1); // Timer input
+	// enable timer in RCC
+	enable_gptimer(RCC_EN_GPTIM2);
+	// set capture modes
+	gptim_set_capmode(TIM2, CC_CH1, CC_MODE_SELF);
+	gptim_set_capmode(TIM2, CC_CH2, CC_MODE_SELF);
 
-	enable_adv_timer(RCC_EN_ADV_TIM1); // enable timer in rcc
-	set_atim_ctmode(TIM1, TIMMODE_UPCOUNTER);
-	set_atim_capmode(TIM1, ATIM_CC1P, CC1_MODE_INPUT_TI1);
-	enable_atim_ch(TIM1, ATIM_CC1P);
-	set_atim_polarity(TIM1, ATIM_CC1P, TIM_POLARITY_NORMAL);
-	set_atim_prescl(TIM1, ATIM_CC1P, ATIM_PRSCL_EVERY_E);
-	set_atim_clk_prscl(TIM1, 49);
-	set_atim_rep_cnt(TIM1,0);
-	atim_ctr_enbl(TIM1);
+	// set timer mode to slave mode.
+	gptim_set_slave_mode(TIM2, GPTIM_SMS_ENC3);
 
-	// setup tim1
-	uint16_t capture = 0;
+	// set timer reload value
+	gptim_set_rld_val(TIM2, 0xfffffffU);
+	gptim_ctr_enbl(TIM2);
+
+	// setup tim
+	//uint16_t capture = 0;
 
 	while (1)
 	{
 		//set_gpio_output(GPIOB, 14U);
-		
+		;
 		//set_gpio_output(GPIOB, 8U); // systick debug
 		//wait_ms(1000);
 		//reset_gpio_output(GPIOB, 14U);
 		//wait_ms(1000);
-		set_gpio_output(GPIOB, 4U);
-		capture = get_atim_capval(TIM1, ATIM_CC_REG_1); // discard every other reading
-		wait_ms(1);
-		reset_gpio_output(GPIOB, 4U);
-		wait_ms(1);
-		set_gpio_output(GPIOB, 4U);
-		capture = get_atim_capval(TIM1, ATIM_CC_REG_1) - capture;
+		//set_gpio_output(GPIOB, 4U);
+		//capture = get_atim_capval(TIM1, ATIM_CC_REG_1); // discard every other reading
+		//wait_ms(1);
+		//reset_gpio_output(GPIOB, 4U);
+		//wait_ms(1);
+		//set_gpio_output(GPIOB, 4U);
+		//capture = get_atim_capval(TIM1, ATIM_CC_REG_1) - capture;
 		// (void)get_addr_contents((uint32_t)&(TIM1->CCR1), &capture); need to unit test this.
-		(void)snprintf(inbuff, 256, "%u\n\r", capture);
-		usart_transmit_bytes(USART_DEBUG, inbuff, 10, '\0'); // need to fix
-		reset_gpio_output(GPIOB, 14U);
+		//(void)snprintf(inbuff, 256, "%u\n\r", capture);
+		//usart_transmit_bytes(USART_DEBUG, inbuff, 10, '\0'); // need to fix
+		//reset_gpio_output(GPIOB, 14U);
 		
 	}
 	return 0;
