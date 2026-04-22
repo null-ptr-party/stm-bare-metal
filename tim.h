@@ -2,6 +2,7 @@
 #define _TIM_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /*Timer note: timers 1:8, 12:17 do not have kernel clocks, but instead
 utilize the bus clock frequency*/
@@ -99,7 +100,10 @@ struct gptim {
 #define ATIM_CC_REG_6 5 // Atim Capture/Compare register 6
 
 // general purpose timer functions. Macros should be used for channels
+// enable counter
 void gptim_ctr_enbl(struct gptim* gptim_ptr);
+// disable counter
+void gptim_ctr_dsbl(struct gptim* gptim_ptr);
 // set general purpose timer reload value
 void gptim_set_rld_val(struct gptim* gptim_ptr, uint32_t rld_val);
 // set slave mode
@@ -107,7 +111,13 @@ void gptim_set_slave_mode(struct gptim* gptim_ptr, uint8_t mode);
 // set capture mode
 void gptim_set_capmode(struct gptim* gptim_ptr, uint8_t ch, uint8_t mode);
 // get count value
-uint32_t gptim_get_cnt(struct gptim* gptim_ptr);
+uint32_t gptim_get_cnt(const struct gptim* gptim_ptr);
+// clear counter value
+void gptim_clear_cnt(struct gptim* gptim_ptr);
+// get direction value
+bool gptim_get_dir(const struct gptim* gptim_ptr);
+// generate update event (reloads/clears counter based on direction bit)
+void gptim_gen_update(struct gptim* gptim_ptr);
 
 // Advanced timer functions. Macros should be used for channels
 // enable atim counter

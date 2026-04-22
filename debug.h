@@ -1,7 +1,10 @@
 #ifndef _DEBUG_H
 #include <stdint.h>
+#include <stdbool.h>
 #define _DEBUG_H
-#define MEM_ADDR_MAX  0xDFFFFFFF
+#define MEM_ADDR_MAX  0x5FFFFFFFU
+#define MEM_ADDR_MIN 0x00000000U
+#define DEBUG_BUFFSIZE 256U
 
 // converts contents of addr to string and writes to buffer
 void addr_contents_to_str(uint32_t addr, char buff[], uint32_t buffsize);
@@ -11,5 +14,8 @@ void ser_memdump_range(uint32_t addr_start, uint32_t addr_stop, char buff[], uin
 void ser_memdump_range_req(char buff[], uint32_t buffsize);
 // returns the contents of the supplied address. If address is out of range, return 1.
 uint32_t get_addr_contents(uint32_t addr, uint32_t* result);
-
+// reads option passed by user and returns inter value
+int32_t read_option(const char buff[]);
+// verify memory range is valid based on macro defs
+bool memrange_valid(uint32_t addr_start, uint32_t addr_stop);
 #endif

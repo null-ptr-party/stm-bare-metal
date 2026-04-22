@@ -38,10 +38,20 @@ void usart_transmit_byte(struct usart* usart, char byte)
 	while ((usart->USART_ISR & BIT(7)) == 0);
 }
 
-void usart_transmit_bytes(struct usart* usart, char buff[], uint32_t num_bytes, char termchar)
+void usart_transmit_bytes(struct usart* usart, const char buff[], uint32_t num_bytes, char termchar)
 {	/* transmit bytes from buffer. The transmission will end when number of bytes is exceeded
 	or a termchar is encountered */
 	for (uint32_t byte_idx = 0; ((byte_idx < num_bytes) && (buff[byte_idx] != termchar)); byte_idx++)
+	{
+		usart_transmit_byte(usart, buff[byte_idx]);
+	}
+	while ((usart->USART_ISR & BIT(6)) == 0);
+}
+
+void usart_transmit_rbytes(struct usart* usart, const uint8_t buff[], uint32_t num_bytes)
+{
+	/* transmits raw bytes pointed to by buff. no termination char used */
+	for (uint32_t byte_idx = 0; byte_idx < num_bytes; byte_idx++)
 	{
 		usart_transmit_byte(usart, buff[byte_idx]);
 	}

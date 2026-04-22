@@ -137,6 +137,8 @@ void enable_adv_timer(uint8_t adv_tim);
 #define RCC_EN_GPTIM12 6U
 #define RCC_EN_GPTIM13 7U
 #define RCC_EN_GPTIM14 8U
+#define RCC_EN_GPTIM23 24U // not a typo. Actually offset by 1.
+#define RCC_EN_GPTIM24 25U // not a typo. Actually offset by 1.
 // General purpose timer enable
 void enable_gptimer(uint8_t gptim);
 

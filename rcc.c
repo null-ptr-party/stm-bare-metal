@@ -232,5 +232,13 @@ void enable_adv_timer(uint8_t adv_tim)
 // general purpose timer
 void enable_gptimer(uint8_t gptimer)
 {
-	RCC->APB1LENR |= BIT(gptimer);
+	if (gptimer <= 8)
+	{
+		RCC->APB1LENR |= BIT(gptimer);
+	} else if ((gptimer == RCC_EN_GPTIM23) ||
+			(gptimer == RCC_EN_GPTIM24))
+	{
+		RCC->APB1HENR |= BIT(gptimer);
+	}
+
 }

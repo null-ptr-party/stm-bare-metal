@@ -1,11 +1,17 @@
 #include "tim.h"
 #include "shared_tools.h"
+#include <stdbool.h>
 
 // General purpose timer functions.
 // enable the counter
 void gptim_ctr_enbl(struct gptim* gptim_ptr)
 {
 	gptim_ptr->CR1 |= BIT(0U);
+}
+
+void gptim_ctr_dsbl(struct gptim* gptim_ptr)
+{
+	gptim_ptr->CR1 &= ~BIT(0U);
 }
 // set general purpose timer reload value.
 // note that only counters 2, 5, 23, and 24 can
@@ -36,7 +42,7 @@ void gptim_set_capmode(struct gptim* gptim_ptr, uint8_t ch, uint8_t mode)
 }
 
 // get count value
-uint32_t gptim_get_cnt(struct gptim* gptim_ptr)
+uint32_t gptim_get_cnt(const struct gptim* gptim_ptr)
 {
 	// TIM 2,5, 23, 24 are full 32 bit counter
 	// other counters are only 16.
@@ -53,6 +59,46 @@ uint32_t gptim_get_cnt(struct gptim* gptim_ptr)
 		return (0xffff & gptim_ptr->CNT);
 	}
 
+}
+
+bool gptim_get_dir(const struct gptim* gptim_ptr)
+{
+	if ((gptim_ptr->CR1 & BIT(4)) != 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void gptim_clear_cnt(struct gptim* gptim_ptr)
+{
+	// clear counter. Note that
+	// TIM 2,5, 23, 24 are full 32 bit counter
+	// other counters are only 16.
+	if ((gptim_ptr == TIM2) ||
+		(gptim_ptr == TIM5) ||
+		(gptim_ptr == TIM23) ||
+		(gptim_ptr == TIM24))
+	{
+		// clear entire count register.
+		gptim_ptr->CNT = 0;
+	}
+	else
+	{
+		// only clear lower bits since
+		// these are only 16 bit counters.
+		gptim_ptr->CNT &= 0xffff0000;
+	}
+
+}
+
+// generate update event (reloads/clears counter based on direction bit)
+void gptim_gen_update(struct gptim* gptim_ptr)
+{
+	gptim_ptr->EGR |= BIT(0);
 }
 // Advanced timer functions.
 // Todo: some of these functions are bloaty. Once we get a feel for the timer
@@ -169,6 +215,4 @@ uint16_t get_atim_capval(struct adv_tim* atim_ptr, uint8_t reg)
 			return (uint16_t)atim_ptr->CCR1;
 			break;
 	}
-	
-
 }
