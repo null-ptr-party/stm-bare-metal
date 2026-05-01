@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "shared_tools.h"
 #include "h723_drivers.h"
-
 // function prototypes:
 void cnt_down(volatile uint32_t cnt);
 void wait_ms(uint32_t ms);
@@ -13,7 +12,7 @@ char inbuff[256] = { 0 };
 
 int main(void)
 {
-	// ====================== Configure power and voltage scaling====================
+	// ====================== Configure initial power and voltage scaling====================
 	cfg_pwr_input();
 	// change VOS scaling to 2
 	set_core_scl(VOS_SCALE_2);
@@ -29,9 +28,10 @@ int main(void)
 
 	while ((PWR->PWR_D3CR & BIT(13)) == 0);
 	// setup pll1. 250 Mhz target. PLL div_fctrs cannot be 0.
+	uint32_t core_clk_target = 250; // create target frequency var
 	struct pll_config pll1config = { .pll_prscl = 1U, .pll_src = PLL_SRC_HSE, .divp_en = TRUE, .divq_en = FALSE,
 		.divr_en = FALSE, .pll_in_rng = PLL_IN_RNG_FOUR_EIGHT, .vco_rng = VCO_RNG_MED, .frac_en = FALSE, .div_fctr_p = 1U,
-		.div_fctr_q = 1U, .div_fctr_r = 1U, .pll_mult = 50U};
+		.div_fctr_q = 1U, .div_fctr_r = 1U, .pll_mult = core_clk_target/HSE_CLOCKSPEED};
 
 	cfg_pll(&pll1config, PLL1);
 	start_pll(PLL1);
@@ -40,8 +40,13 @@ int main(void)
 	{
 		; // block until pll ready
 	}
-
+	// increase clock speed to 400 Mhz
 	set_sys_clk(SYSCLK_SRC_PLL1);
+	core_clk_target = 400;
+	pll1config.pll_mult = core_clk_target/HSE_CLOCKSPEED; // change pll clockspeed
+	set_core_scl(VOS_SCALE_1);
+
+
 	// setup pll2 384,000,000 hz target. 76.8 PLL multiplier. 11x multiplier 6525 fractional multiplier. Must be in range
 	// 192-836 Mhz
 	// this is mainly driven by the desire to have an integer multiple of standard baud rates.
