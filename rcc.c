@@ -146,6 +146,63 @@ void set_sys_clk(uint8_t clksrc)
 	RCC->CFGR |= (0x03U & clksrc);
 }
 
+// Domain 1 clock configurations
+// Domain 1 Core prescaler
+void cfg_d1_core_prsclr(uint8_t prscl)
+{
+	uint32_t word = 0; // default value.
+
+	if (prscl == D1_CORE_PRSCLR_2 ||
+		prscl == D1_CORE_PRSCLR_4 ||
+		prscl == D1_CORE_PRSCLR_8 ||
+		prscl == D1_CORE_PRSCLR_16 ||
+		prscl == D1_CORE_PRSCLR_64 ||
+		prscl == D1_CORE_PRSCLR_128 ||
+		prscl == D1_CORE_PRSCLR_256 ||
+		prscl == D1_CORE_PRSCLR_512)
+	{
+		word = prscl;
+	}
+
+	RCC->D1CFGR = (RCC->D1CFGR & ~(MASK(3) << 0x08U)) | (word << 0x08U);
+}
+
+// Domain 1 ahb prescaler
+void cfg_d1_ahb_prsclr(uint8_t prscl)
+{
+	uint32_t word = 0; // default value.
+
+	if (prscl == D1_AHB_PRSCLR_2 ||
+		prscl == D1_AHB_PRSCLR_4 ||
+		prscl == D1_AHB_PRSCLR_8 ||
+		prscl == D1_AHB_PRSCLR_16 ||
+		prscl == D1_AHB_PRSCLR_64 ||
+		prscl == D1_AHB_PRSCLR_128 ||
+		prscl == D1_AHB_PRSCLR_256 ||
+		prscl == D1_AHB_PRSCLR_512)
+	{
+		word = prscl;
+	}
+
+	RCC->D1CFGR = (RCC->D1CFGR & ~MASK(3)) | word;
+}
+
+// Domain 1 APB3 prescaler
+void cfg_d1_apb3_prsclr(uint8_t prscl)
+{
+	uint32_t word = 0; // default value.
+
+	if (prscl == D1_APB3_PRSCLR_2 ||
+		prscl == D1_APB3_PRSCLR_4 ||
+		prscl == D1_APB3_PRSCLR_8 ||
+		prscl == D1_APB3_PRSCLR_16)
+	{
+		word = prscl;
+	}
+
+	RCC->D1CFGR = (RCC->D1CFGR & ~(MASK(3) << 0x04U)) | (word << 0x04U);
+}
+
 void cfg_krnl_clks(struct krnl_clk_cfg* cfg)
 {
 	/* Controls mux settings kernel clocks based off the contents of cfg struct.
