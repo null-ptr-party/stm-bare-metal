@@ -10,6 +10,13 @@ struct flash {
 	 CRCEADDR, CRCDATAR, ECC_FAR, RSV2[3], OPTSR2_CUR, OPTSR2_PRG;
 };
 
+// Set number of wait states
+void set_wait_states(uint8_t num_states);
+// set write frequency
+void set_prog_delay(uint8_t delay);
+
+
+
 #define FLASH ((struct flash *)0x52002000)
 
 #endif
