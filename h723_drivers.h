@@ -12,5 +12,6 @@
 #include "systick.h"
 #include "tim.h"
 #include "usart.h"
+#include "flash.h"
 
 #endif
