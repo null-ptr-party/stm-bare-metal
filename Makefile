@@ -18,6 +18,7 @@ exti.c \
 syscfg.c \
 nvic.c \
 tim.c \
+flash.c \
 
 OUTNAME = firmware.elf
 	
