@@ -17,6 +17,10 @@ struct rcc {
 		C1_AHB2LPENR, C1_AHB4LPENR, C1_APB3LPENR, C1_APB1LLPENR, C1_APB1HLPENR, C1_APB2LPENR,
 		C1_APB4LPENR, RSV12[32];
 };
+
+// HSE Clock Macro. Note for the Nucleo STM32h723, the core clock is default 8Mhz
+// but it can be changed using the STLINK tool
+#define HSE_CLOCKSPEED 5U // In MHZ
 // RCC macro
 #define RCC ((struct rcc *)0x58024400)
 
