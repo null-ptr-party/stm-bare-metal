@@ -95,6 +95,45 @@ uint32_t hse_is_rdy(void);
 
 void set_sys_clk(uint8_t clksrc);
 
+// Domain 1 clock configuration
+// core prescaler macros
+#define D1_CORE_PRSCLR_1 0x00U
+#define D1_CORE_PRSCLR_2 0x08U
+#define D1_CORE_PRSCLR_4 0x09U
+#define D1_CORE_PRSCLR_8 0x0aU
+#define D1_CORE_PRSCLR_16 0x0bU
+#define D1_CORE_PRSCLR_64 0x0cU
+#define D1_CORE_PRSCLR_128 0x0dU
+#define D1_CORE_PRSCLR_256 0x0eU
+#define D1_CORE_PRSCLR_512 0xffU
+
+// Domain 1 core prescaler
+void cfg_d1_core_prsclr(uint8_t prscl);
+
+// ahb prescaler macros
+#define D1_AHB_PRSCLR_1 0x00U
+#define D1_AHB_PRSCLR_2 0x08U
+#define D1_AHB_PRSCLR_4 0x09U
+#define D1_AHB_PRSCLR_8 0x0aU
+#define D1_AHB_PRSCLR_16 0x0bU
+#define D1_AHB_PRSCLR_64 0x0cU
+#define D1_AHB_PRSCLR_128 0x0dU
+#define D1_AHB_PRSCLR_256 0x0eU
+#define D1_AHB_PRSCLR_512 0xffU
+
+// Domain 1 ahb prescaler
+void cfg_d1_ahb_prsclr(uint8_t prscl);
+
+// Domain 1 APB3 prescaler macros
+#define D1_APB3_PRSCLR_1 0x00U
+#define D1_APB3_PRSCLR_2 0x04U
+#define D1_APB3_PRSCLR_4 0x05U
+#define D1_APB3_PRSCLR_8 0x06U
+#define D1_APB3_PRSCLR_16 0x07U
+
+// Domain 1 APB3 prescaler
+void cfg_d1_apb3_prsclr(uint8_t prscl);
+
 // configure kernel clocks
 void cfg_krnl_clks(struct krnl_clk_cfg* cfg);
 void enable_usart3(void);
