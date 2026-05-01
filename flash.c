@@ -15,4 +15,3 @@ void set_prog_delay(uint8_t delay)
 	FLASH->ACR = ((FLASH->ACR & ~(MASK(1) << 4U)) | word);
 }
 
-
