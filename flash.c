@@ -60,10 +60,22 @@ void lock_flash_cr()
 	FLASH->CR |= BIT(0);
 }
 
+// write keys to unlock CR register
+void write_keys()
+{
+	FLASH->KEYR = FLASH_KEY_ONE;
+	FLASH->KEYR = FLASH_KEY_TWO;
+}
+// enable flash buffer
+void enable_flash_buffer()
+{
+	FLASH->CR |= BIT(1);
+}
+
 // check wait queue
 bool get_flash_queue_status()
 {
-	if ((FLASH->SR & BIT(2)) == 0)
+	if ((FLASH->SR & BIT(2)) != 0)
 	{
 		return OPERATION_IN_QUEUE;
 	}
@@ -76,6 +88,7 @@ bool get_flash_queue_status()
 // write to flash
 int32_t write_flash(uint32_t address, const uint8_t buff[32])
 {
+	FLASH->CCR = (FLASH->CCR & ~(BIT(18) | BIT(21))); // clear error bits.
 	// ensure address is aligned on 32 byte address
 	if ((address % 32) != 0) return -1;
 	// check address range. Since we write 32 bytes at a time,

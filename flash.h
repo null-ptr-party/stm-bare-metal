@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 struct flash {
-	volatile uint32_t ACR, KEYR, CR, SR, CCR, OPTCR, OPTSR_CUR, OPTSR_PRG,
+	volatile uint32_t ACR, KEYR, OPTKEYR, CR, SR, CCR, OPTCR, OPTSR_CUR, OPTSR_PRG,
 	OPTCCR, PRAR_CUR, PRAR_PRG, SCAR_CUR, SCAR_PRG, WPSN_CUR,
 	WPSN_PRG, BOOT_CUR, BOOT_PRG, RSV1[2], CRCCR, CRCSADDR,
 	 CRCEADDR, CRCDATAR, ECC_FAR, RSV2[3], OPTSR2_CUR, OPTSR2_PRG;
@@ -15,7 +15,7 @@ struct flash {
 
 // address macros
 #define FLASH_ADDRESS_MAX 0x080FFFFF
-#define FLASH_ADDRESS_MIN 0x08100000
+#define FLASH_ADDRESS_MIN 0x08000000
 
 // Set number of wait states
 void set_wait_states(uint8_t num_states);
@@ -39,6 +39,15 @@ void unlock_flash_cr();
 
 // lock flash control register
 void lock_flash_cr();
+
+#define FLASH_KEY_ONE 0x45670123U
+#define FLASH_KEY_TWO 0xCDEF89ABU
+
+// write keys to unlock CR register
+void write_keys();
+
+// enable flash buffer
+void enable_flash_buffer();
 
 #define OPERATION_IN_QUEUE true
 #define NO_OPERATION_IN_QUEUE false
